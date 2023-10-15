@@ -1,3 +1,4 @@
+#An .env file with environment variables for this configuration must be created in the application root directory. Most likely they will be duplicated from .env.development.local.
 version: "3.9"
 
 services:
@@ -21,7 +22,7 @@ services:
       - "3000:3000"
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_HOST: pg
       POSTGRES_PORT: 5432
       POSTGRES_DB: dev
@@ -43,7 +44,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: dev
     volumes:
       # - ./postgresdata:/var/lib/postgresql/data
