@@ -2,7 +2,7 @@
 
 This application implements the server part of the local hosting management manager. The client part of the application is located in the repository [chat3-manager-frontend](https://github.com/vzx7/chat3-manager-frontend).
 
-The application is built on the basis of a starter [typescript-express-starter](https://github.com/ljlm0402/typescript-express-starter).
+The application is built on the basis of a starter [TypeScript Express Starter](https://github.com/ljlm0402/typescript-express-starter).
 
 ## Technologies
 
@@ -181,7 +181,7 @@ Modify `Makefile` file to your source code.
 ```
 ## Goal
 
-This application interacts with the Postgresql database, the HestiaCP API CLI and API Aplication Creator (
+This application interacts with the Postgresql database, the [HestiaCP](https://hestiacp.com/) API CLI and API Aplication Creator (
 application for deploying a template application in a domain) which are deployed in the same environment.
 
 Through the Hestia API, we will administer local hosting. Create new sites, configure the environment, dns zone, etc.
