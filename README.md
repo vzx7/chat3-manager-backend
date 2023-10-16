@@ -150,6 +150,8 @@ Modify `Makefile` file to your source code.
 │  ├──📂 utils
 │  │  ├── logger.ts
 │  │  └── vaildateEnv.ts
+│  ├──📂 static
+│  │  └── index.html
 │  │
 │  ├── app.ts
 │  └── server.ts
