@@ -29,7 +29,7 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
           users
         WHERE
           "id" = $1
-      `, id);
+      `, <any>id);
 
       if (rowCount) {
         req.user = rows[0];
