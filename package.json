@@ -12,8 +12,9 @@
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "deploy:prod": "npm run build && pm2 start ecosystem.config.js --only prod",
-    "deploy:dev": "pm2 start ecosystem.config.js --only dev"
+    "deploy:prod": "npm run build && npm run start:prod",
+    "deploy:dev": "pm2 start ecosystem.config.js --only dev",
+    "start:prod": "pm2 start ecosystem.config.js --only prod"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
