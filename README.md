@@ -189,6 +189,53 @@ application for deploying a template application in a domain) which are deployed
 Through the Hestia API, we will administer local hosting. Create new sites, configure the environment, dns zone, etc.
 Through the API Aplication creator, we will deploy the application itself on a new domain domain.
 
+## Build for develop
+Let's prepare the development environment:
+```bash 
+# if docker was not installed
+# for archlinux 
+$ sudo pacman -S docker docker-compose
+$ sudo usermod -aG docker ${USER}
+# logout from user and go in
+# get code
+$ git clone git@github.com:vzx7/chat3-manager-backend.git
+$ cd chat3-manager-backend
+$ npm i
+```
+To build the application, you need to add two files to the root dir
+**.env** for docker-compose, and **.env.development.local** for the application itself.
+They should contain the following variables:
+```ini
+# PORT
+PORT = 3000
+
+# TOKEN
+SECRET_KEY = your_key
+
+# LOG
+LOG_FORMAT = dev
+LOG_DIR = ../logs
+
+# CORS
+ORIGIN = *
+CREDENTIALS = true
+
+# DATABASE
+POSTGRES_USER = root
+POSTGRES_PASSWORD = your_password
+POSTGRES_HOST = localhost
+POSTGRES_PORT = 5432
+POSTGRES_DB = dev
+```
+Let's build and launch
+```bash
+$ ./src/scripts/dockerStart.sh
+```
+Stop app:
+```bash
+$ ./src/scripts/dockerStop.sh
+```
+
 ## 💳 License
 
 [MIT](LICENSE)
