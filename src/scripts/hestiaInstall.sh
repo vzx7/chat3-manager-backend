@@ -1,7 +1,4 @@
 #!/usr/bin/sh
-# start docker;
-# https://hestiacp.com/install.html
-# DON'T FORGET TO FILL IN THE FIELD --email!
 
 
 wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh
