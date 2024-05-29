@@ -10,11 +10,11 @@ CREATE TABLE users(
     "email" VARCHAR(32) UNIQUE NOT NULL,
     "password" VARCHAR(100) NOT NULL,
     "fio" VARCHAR(100) NOT NULL,
-    "photo" VARCHAR(100) NOT NULL,
-    "phone" SMALLINT NOT NULL,
+    "photo" VARCHAR(100),
+    "phone" SMALLINT,
     "bio" TEXT,
-    "role" SMALLINT,
-    "active" BOOLEAN,
+    "role" SMALLINT NOT NULL,
+    "active" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );
@@ -22,8 +22,8 @@ CREATE TABLE users(
 CREATE TABLE services(
     "id" SERIAL PRIMARY KEY,
     "domain" VARCHAR(32) UNIQUE NOT NULL,
-    "active" BOOLEAN,
-    "isConfigured" BOOLEAN,
+    "active" BOOLEAN NOT NULL,
+    "isConfigured" BOOLEAN NOT NULL,
     "managerId" INTEGER NOT NULL REFERENCES users (id),
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
