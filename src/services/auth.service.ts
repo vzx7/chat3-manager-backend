@@ -21,7 +21,7 @@ const createCookie = (tokenData: TokenData): string => {
 @Service()
 export class AuthService {
   public async signup(userData: User): Promise<User> {
-    const { email, password } = userData;
+    const { email, password, bio, fio, photo, phone } = userData;
 
     const { rows: findUser } = await pg.query(
       `
@@ -35,20 +35,30 @@ export class AuthService {
     )`,
       [email],
     );
+    
     if (findUser[0].exists) throw new HttpException(409, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(password, 10);
+    const role = 2; // manager
+    const active = true;
+     
     const { rows: signUpUserData } = await pg.query(
       `
       INSERT INTO
         users(
           "email",
-          "password"
+          "password",
+          "fio",
+          "photo",
+          "phone",
+          "bio",
+          "role",
+          "active"
         )
       VALUES ($1, $2)
-      RETURNING "email", "password"
+      RETURNING "email", "photo", "fio"
       `,
-      [email, hashedPassword],
+      [email, hashedPassword, fio, photo, phone, bio, role, active],
     );
 
     return signUpUserData[0];
