@@ -209,8 +209,9 @@ They should contain the following variables:
 # PORT
 PORT = 3000
 
-# TOKEN
-SECRET_KEY = your_key
+# TOKENS
+TOKEN_SECRET_KEY = your_key
+REFRESH_TOKEN_SECRET_KEY = your_key
 
 # LOG
 LOG_FORMAT = dev
