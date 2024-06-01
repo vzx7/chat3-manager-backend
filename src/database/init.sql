@@ -11,7 +11,7 @@ CREATE TABLE users(
     "email" VARCHAR(32) UNIQUE NOT NULL,
     "password" VARCHAR(100) NOT NULL,
     "fio" VARCHAR(100) NOT NULL,
-    "phone" SMALLINT NOT NULL,
+    "phone" BIGINT NOT NULL,
     "bio" TEXT,
     "role" SMALLINT NOT NULL,
     "active" BOOLEAN NOT NULL,

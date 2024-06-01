@@ -106,7 +106,6 @@ export class AuthService {
     const hashedPassword = await hash(password, 10);
     const role = 2; // manager
     const active = true;
-     
     const { rows: signUpUserData } = await pg.query(
       `
       INSERT INTO
@@ -119,8 +118,8 @@ export class AuthService {
           "role",
           "active"
         )
-      VALUES ($1, $2)
-      RETURNING "email", "photo", "fio"
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING "id", "fio"
       `,
       [email, hashedPassword, fio, phone, bio, role, active],
     );
@@ -139,6 +138,7 @@ export class AuthService {
     const { rows, rowCount } = await pg.query(
       `
       SELECT
+        "id",
         "email",
         "password"
       FROM
