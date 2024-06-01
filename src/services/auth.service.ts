@@ -8,37 +8,83 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 
 const TOKENS_TIME = {
-  TOKEN: '15m',
-  REFRESH_TOKEN: '14d'
+  TOKEN: 15 * 60000,            //  15m
+  REFRESH_TOKEN: 15 * 86400000  // '15d'
 }
 
-const createTokens = (user: User): TokenData => {
+const createTokens = async (user: User): Promise<TokenData> => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
+  const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN });
+  const refreshTokenSaved = await saveRefreshToken(user.id, refreshToken);
+  
+  if (!refreshTokenSaved) throw new HttpException(409, "RefreshToken could not be saved!");
+  
   return { 
     token: {
       key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN }),
       expiresIn: TOKENS_TIME.TOKEN
     },
     refreshToken: {
-      key: sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN }),
+      key: refreshTokenSaved,
       expiresIn: TOKENS_TIME.REFRESH_TOKEN 
     }
   };
 };
 
-const saveToken = () => {
-  // save to DB
-}
+const saveRefreshToken = async (userId: number, refreshToken: string) => {
+  const { rows: findToken } = await pg.query(
+    `
+  SELECT EXISTS(
+    SELECT
+      "token"
+    FROM
+      tokens
+    WHERE
+      "userId" = $1
+  )`,
+    [userId],
+  );
 
-const createCookie = (tokenData: TokenData): string[] => {
-  return [
-    `Authorization=${tokenData.token.key}; HttpOnly; Max-Age=${tokenData.token.expiresIn}`,
-    `RefreshToken=${tokenData.refreshToken.key}; HttpOnly; Max-Age=${tokenData.refreshToken.expiresIn}`
-  ];
-};
+  let newToken;
+
+  if (findToken[0].exists) {
+    await pg.query(
+      `
+      UPDATE
+        tokens
+      SET
+        "token" = $2
+      WHERE
+        "userId" = $1
+    `,
+      [userId, refreshToken]
+    );
+  } else {
+    const { rows } = await pg.query(
+      `
+      INSERT INTO
+        tokens(
+          "token",
+          "userId"
+        )
+      VALUES ($1, $2)
+      RETURNING "token"
+      `,
+      [refreshToken, userId]
+    );
+    newToken = rows;
+  }
+
+  return newToken[0]?.token;
+}
 
 @Service()
 export class AuthService {
+  /**
+   * Регистрация
+   * @param userData 
+   * @returns 
+   */
   public async signup(userData: User): Promise<User> {
     const { email, password, bio, fio, phone } = userData;
 
@@ -82,7 +128,12 @@ export class AuthService {
     return signUpUserData[0];
   }
 
-  public async login(userData: User): Promise<{ cookie: string[]; findUser: User, token: string }> {
+  /**
+   * Авторизация
+   * @param userData 
+   * @returns 
+   */
+  public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
 
     const { rows, rowCount } = await pg.query(
@@ -102,30 +153,30 @@ export class AuthService {
     const isPasswordMatching: boolean = await compare(password, rows[0].password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
 
-    const tokenData = createTokens(rows[0]);
-    const cookie = createCookie(tokenData);
-    return { cookie, findUser: rows[0], token: tokenData.token.key };
+    const tokenData = await createTokens(rows[0]);
+    return { findUser: rows[0], tokenData };
   }
 
-  public async logout(userData: User): Promise<User> {
-    const { email, password } = userData;
-    createCookie
-    const { rows, rowCount } = await pg.query(
-      `
-    SELECT
-        "email",
-        "password"
-      FROM
-        users
-      WHERE
-        "email" = $1
-      AND
-        "password" = $2
-    `,
-      [email, password],
-    );
-    if (!rowCount) throw new HttpException(409, "User doesn't exist");
+  /**
+   * Ралогин, удаляем рефрештокен
+   * @param userData 
+   * @returns 
+   */
+  public async logout(userData: User): Promise<{ id: number }> {
+    const { id } = userData;
 
-    return rows[0];
+    const { rows: deleteToken } = await pg.query(
+      `
+      DELETE
+      FROM
+        tokens
+      WHERE
+        userId = $1
+      RETURNING "id"
+      `,
+      [id]
+    );
+
+    return deleteToken[0];
   }
 }
