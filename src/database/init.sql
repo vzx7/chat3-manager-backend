@@ -13,8 +13,8 @@ CREATE TABLE users(
     "fio" VARCHAR(100) NOT NULL,
     "phone" SMALLINT NOT NULL,
     "bio" TEXT,
-    "role" SMALLINT,
-    "active" BOOLEAN,
+    "role" SMALLINT NOT NULL,
+    "active" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );

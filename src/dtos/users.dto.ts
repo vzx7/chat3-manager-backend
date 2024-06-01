@@ -1,6 +1,7 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty()
   @IsEmail()
   public email: string;
 
@@ -9,6 +10,25 @@ export class CreateUserDto {
   @MinLength(9)
   @MaxLength(32)
   public password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public fio: string;
+
+  @IsString()
+  public photo: string;
+
+  @IsString()
+  @MinLength(9)
+  @MaxLength(9)
+  public phone: number;
+
+  @IsString()
+  public bio: string;
+
+  @IsNumber()
+  @IsBoolean()
+  public active: boolean;
 }
 
 export class UpdateUserDto {
@@ -17,4 +37,23 @@ export class UpdateUserDto {
   @MinLength(9)
   @MaxLength(32)
   public password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public fio: string;
+
+  @IsString()
+  public photo: string;
+
+  @IsString()
+  @MinLength(9)
+  @MaxLength(9)
+  public phone: string;
+
+  @IsString()
+  public bio: string;
+
+  @IsNumber()
+  @IsBoolean()
+  public active: string;
 }
