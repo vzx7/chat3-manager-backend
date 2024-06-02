@@ -56,7 +56,18 @@ export class UserController {
       const userId = Number(req.params.id);
       const deleteUserData: User[] = await this.user.deleteUser(userId);
 
-      res.status(200).json({ data: deleteUserData, message: 'deleted' });
+      res.status(200).json({ data: deleteUserData[0], message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public setActive = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.body;
+      const updateUserData: User[] = await this.user.setActiveUser(userData);
+
+      res.status(200).json({ data: updateUserData[0], message: 'set active' });
     } catch (error) {
       next(error);
     }

@@ -36,6 +36,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
 }
 
 ###
+# Set access User By Id
+PUT {{ baseURL }}/users/setActive
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+
+{
+    "active": false,
+	"id": 1
+}
+
+###
 # Delete User By Id
 DELETE {{ baseURL }}/users/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc

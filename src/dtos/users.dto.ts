@@ -53,3 +53,13 @@ export class UpdateUserDto {
   @IsString()
   public bio: string;
 }
+
+export class AccessUserDto {
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  active: boolean;
+}

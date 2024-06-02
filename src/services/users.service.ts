@@ -143,7 +143,7 @@ export class UserService {
     `,
       [userId, ...params],
     );
-    console.log(updateUserData)
+
     return updateUserData;
   }
 
@@ -175,5 +175,37 @@ export class UserService {
     );
 
     return deleteUserData;
+  }
+
+  public async setActiveUser(userData: User): Promise<User[]> {
+    const { id, active } = userData;
+    const { rows: findUser } = await pg.query(
+      `
+      SELECT EXISTS(
+        SELECT
+          "id"
+        FROM
+          users
+        WHERE
+          "id" = $1
+      )`,
+      [id],
+    );
+    if (!findUser[0].exists) throw new HttpException(409, "User doesn't exist");
+
+    const { rows: updateUserData } = await pg.query(
+      `
+      UPDATE
+        users
+      SET
+        "active" = $2
+      WHERE
+        "id" = $1
+      RETURNING "id"
+    `,
+      [id, active],
+    );
+
+    return updateUserData;
   }
 }
