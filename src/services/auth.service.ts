@@ -110,7 +110,8 @@ export class AuthService {
     const isPasswordMatching: boolean = await compare(password, rows[0].password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
     const tokenData = await createTokens(rows[0]);
-    console.log(111, tokenData)
+    //FIXME убрать после отладки
+    console.log('JWT: ' + tokenData.token.key);
     return { findUser: rows[0], tokenData };
   }
 
