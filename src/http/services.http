@@ -5,7 +5,7 @@
 # Create Service
 POST {{ baseURL }}/createService
 Content-Type: application/json
-Authorization: Bearer xxx
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzMxNTMyLCJleHAiOjE3MTgyMzE1MzJ9.srvTDM6PvdqJcN6c2bu4IRWURqsSMwVUWHB7KkVgRww
 
 {
     "domain": "newDomain",
@@ -17,9 +17,28 @@ Authorization: Bearer xxx
 # Update Service
 POST {{ baseURL }}/updateService/1
 Content-Type: application/json
-Authorization: token xxx
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzM0MTQ1LCJleHAiOjE3MTgyMzQxNDV9.h8Go4l7xt34a7v6o9CdPY010JamJ9IqoUNP6q5IVSmk
 
 {
-
+    "name": "Самый лучший сервис",
+    "title": "Очень хороший тайтл",
+    "type": 1,
+    "brand": 7,
+    "description": "Какое-то там описание...",
+    "personalPolice": "<p>Политика</p>",
+    "url": "https://asdf.ad/dfa",
+    "autoCenter": {
+        "name": "Крутой автоцентр",
+        "phone": 7887887878,
+        "address": "Москва, Красная Площадь",
+        "email": "gfrt@fg.fg",
+        "timezone": "Asia/Tomsk"
+    },
+    "consultant": {
+        "name": "Федя",
+        "male": 1,
+        "photo": " ",
+        "description": "Хороший консультант"
+    }
 }
 

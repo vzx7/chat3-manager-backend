@@ -18,6 +18,7 @@ export class ServiceController {
   };
 
   public updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    res.status(201).json({  });
     try {
       /* const userData: User = req.body;
       const { cookie, findUser } = await this.auth.login(userData);

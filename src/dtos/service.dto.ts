@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail, IsBoolean, IsUrl } from 'class-validator';
 
 export class CreateServiceDto {
     @IsNotEmpty()
@@ -57,15 +57,19 @@ class Consultant {
 export class UpdateServiceDto {
     @IsNotEmpty()
     @IsString()
-    public domain: string;
+    public name: string; 
 
     @IsNotEmpty()
     @IsString()
-    public type: string; 
+    public title: string; 
 
     @IsNotEmpty()
-    @IsString()
-    public brand: string;
+    @IsNumber()
+    public type: number;
+
+    @IsNotEmpty()
+    @IsNumber()
+    public brand: number;
 
     @IsNotEmpty()
     @IsString()
@@ -76,17 +80,18 @@ export class UpdateServiceDto {
     public personalPolice: string; 
 
     @IsString()
+    @IsUrl()
     public url: string; 
 
     @IsNotEmpty()
     @IsNotEmptyObject()
-    @ValidateNested({ each: true })
+    @ValidateNested()
     @Type(() => AutoCenter)
     public autoCenter: AutoCenter;
 
     @IsNotEmpty()
     @IsNotEmptyObject()
-    @ValidateNested({ each: true })
+    @ValidateNested()
     @Type(() => Consultant)
     public consultant: Consultant;
 }
