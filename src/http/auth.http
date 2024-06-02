@@ -28,7 +28,7 @@ Content-Type: application/json
 # User Logout
 POST {{ baseURL }}/logout
 Content-Type: application/json
-Authorization: Bearer xxx
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ2MjA5LCJleHAiOjE3MTgyNDYyMDl9.lsGKDovhKME7nNP9bEf_LnooF2nO1QElsPd88gb19_4
 
 {
     "id": 1
