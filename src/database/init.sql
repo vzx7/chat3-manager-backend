@@ -26,7 +26,7 @@ CREATE TABLE services(
     "isInitialization" BOOLEAN,
     "isConfigured" BOOLEAN,
     "isSSL" BOOLEAN,
-    "userId" INTEGER NOT NULL REFERENCES users (id),
+    "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );
@@ -34,7 +34,7 @@ CREATE TABLE services(
 CREATE TABLE tokens(
     "id" SERIAL PRIMARY KEY,
     "token" VARCHAR(300) UNIQUE NOT NULL,
-    "userId" INTEGER NOT NULL REFERENCES users (id),
+    "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );

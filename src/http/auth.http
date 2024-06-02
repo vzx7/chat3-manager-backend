@@ -2,19 +2,6 @@
 @baseURL = http://localhost:3000
 
 ###
-# User Signup
-POST {{ baseURL }}/signup
-Content-Type: application/json
-
-{
-    "email": "example@email.com",
-	"password": "password#@",
-    "fio": "Иван Иваныч Иванов",
-    "phone": 7897897899,
-    "bio": "Очень хороший менеджер"
-}
-
-###
 # User Login
 POST {{ baseURL }}/login
 Content-Type: application/json
@@ -28,7 +15,7 @@ Content-Type: application/json
 # User Logout
 POST {{ baseURL }}/logout
 Content-Type: application/json
-Authorization: Bearer xxx
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ2OTUzLCJleHAiOjE3MTgyNDY5NTN9.dgAVPFce9J_nacqKQX7r3XDmzfdiUamW_46P9fX0Q7Y
 
 {
     "id": 1

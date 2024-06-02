@@ -36,25 +36,20 @@ export class LoginUserDto {
 }
 
 export class UpdateUserDto {
+  @IsEmail()
+  public email: string;
+
   @IsString()
-  @IsNotEmpty()
   @MinLength(9)
   @MaxLength(32)
   public password: string;
 
   @IsString()
-  @IsNotEmpty()
   public fio: string;
 
-  @IsString()
-  @MinLength(9)
-  @MaxLength(9)
-  public phone: string;
+  @IsNumber()
+  public phone: number;
 
   @IsString()
   public bio: string;
-
-  @IsNumber()
-  @IsBoolean()
-  public active: string;
 }

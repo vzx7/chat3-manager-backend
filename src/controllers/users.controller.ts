@@ -6,6 +6,17 @@ import { UserService } from '@services/users.service';
 export class UserController {
   public user = Container.get(UserService);
 
+  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.body;
+      const signUpUserData: User = await this.user.createUser(userData);
+
+      res.status(201).json({ data: signUpUserData, message: 'signup' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllUsersData: User[] = await this.user.findAllUser();
@@ -27,16 +38,6 @@ export class UserController {
     }
   };
 
-  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userData: User = req.body;
-      const createUserData: User = await this.user.createUser(userData);
-
-      res.status(201).json({ data: createUserData, message: 'created' });
-    } catch (error) {
-      next(error);
-    }
-  };
 
   public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

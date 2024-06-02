@@ -84,53 +84,6 @@ const saveRefreshToken = async (userId: number, refreshToken: string) => {
 @Service()
 export class AuthService {
   /**
-   * Регистрация
-   * @param userData 
-   * @returns 
-   */
-  public async signup(userData: User): Promise<User> {
-    const { email, password, bio, fio, phone } = userData;
-
-    const { rows: findUser } = await pg.query(
-      `
-    SELECT EXISTS(
-      SELECT
-        "email"
-      FROM
-        users
-      WHERE
-        "email" = $1
-    )`,
-      [email],
-    );
-
-    if (findUser[0].exists) throw new HttpException(409, `This email ${userData.email} already exists`);
-
-    const hashedPassword = await hash(password, 10);
-    const role = 2; // manager
-    const active = true;
-    const { rows: signUpUserData } = await pg.query(
-      `
-      INSERT INTO
-        users(
-          "email",
-          "password",
-          "fio",
-          "phone",
-          "bio",
-          "role",
-          "active"
-        )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING "id", "fio"
-      `,
-      [email, hashedPassword, fio, phone, bio, role, active],
-    );
-
-    return signUpUserData[0];
-  }
-
-  /**
    * Авторизация
    * @param userData 
    * @returns 
