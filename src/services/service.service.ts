@@ -11,21 +11,21 @@ export class ServiceHelper {
         const { domain, isSSL, userId } = serviceData;
 
         const active = true;
-        const isConfigured = await this.externalAPIService.checkApplicationByDomain(domain);
+        const isConfigured = false;//await this.externalAPIService.checkApplicationByDomain(domain);
         const isiInitialization = false;
 
         const { rows: appData } = await pg.query(
             `
       INSERT INTO
-        users(
+        services(
           "domain",
           "active",
-          "isiInitialization",
+          "isInitialization",
           "isConfigured",
           "isSSL",
           "userId"
         )
-      VALUES ($1, $2)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING "id", "isConfigured"
       `,
             [domain, active, isiInitialization, isConfigured, isSSL, userId],

@@ -5,7 +5,7 @@ import { ValidationMiddleware } from '@middlewares/validation.middleware';
 import { CreateServiceDto, UpdateServiceDto } from '@/dtos/service.dto';
 import { ServiceController } from '@/controllers/service.controller';
 
-export class AuthRoute implements Routes {
+export class ServiceRoute implements Routes {
   public router = Router();
   public service = new ServiceController();
 

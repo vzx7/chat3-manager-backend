@@ -8,7 +8,11 @@ export class CreateServiceDto {
 
     @IsNotEmpty()
     @IsBoolean()
-    isSSL: number;
+    isSSL: boolean;
+
+    @IsNotEmpty()
+    @IsNumber()
+    userId: number;
 }
 
 class AutoCenter {

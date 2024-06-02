@@ -1,0 +1,25 @@
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# Create Service
+POST {{ baseURL }}/createService
+Content-Type: application/json
+Authorization: Bearer xxx
+
+{
+    "domain": "newDomain",
+    "isSSL": true,
+    "userId": 1
+}
+
+###
+# Update Service
+POST {{ baseURL }}/updateService/1
+Content-Type: application/json
+Authorization: token xxx
+
+{
+
+}
+
