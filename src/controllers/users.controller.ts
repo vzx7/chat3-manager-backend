@@ -6,6 +6,17 @@ import { UserService } from '@services/users.service';
 export class UserController {
   public user = Container.get(UserService);
 
+  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.body;
+      const signUpUserData: User = await this.user.createUser(userData);
+
+      res.status(201).json({ data: signUpUserData, message: 'signup' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllUsersData: User[] = await this.user.findAllUser();
@@ -27,16 +38,6 @@ export class UserController {
     }
   };
 
-  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userData: User = req.body;
-      const createUserData: User = await this.user.createUser(userData);
-
-      res.status(201).json({ data: createUserData, message: 'created' });
-    } catch (error) {
-      next(error);
-    }
-  };
 
   public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -55,7 +56,18 @@ export class UserController {
       const userId = Number(req.params.id);
       const deleteUserData: User[] = await this.user.deleteUser(userId);
 
-      res.status(200).json({ data: deleteUserData, message: 'deleted' });
+      res.status(200).json({ data: deleteUserData[0], message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public setActive = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.body;
+      const updateUserData: User[] = await this.user.setActiveUser(userData);
+
+      res.status(200).json({ data: updateUserData[0], message: 'set active' });
     } catch (error) {
       next(error);
     }

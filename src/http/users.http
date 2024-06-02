@@ -2,33 +2,52 @@
 @baseURL = http://localhost:3000
 
 ###
-# Find All Users
-GET {{ baseURL }}/users
-
-###
-# Find User By Id
-GET {{ baseURL }}/users/1
-
-###
-# Create User
-POST {{ baseURL }}/users
+# User Signup
+POST {{ baseURL }}/users/createUser
 Content-Type: application/json
 
 {
     "email": "example@email.com",
-	"password": "password"
+	"password": "password#@",
+    "fio": "Иван Иваныч Иванов",
+    "phone": 7897897899,
+    "bio": "Очень хороший менеджер"
 }
+
+###
+# Find All Users
+GET {{ baseURL }}/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+###
+# Find User By Id
+GET {{ baseURL }}/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
 
 ###
 # Modify User By Id
 PUT {{ baseURL }}/users/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
 
 {
-    "email": "example@email.com",
-	"password": "password"
+    "email": "example1113434@email.com",
+	"password": "password!@2",
+    "bio": "888"
+}
+
+###
+# Set access User By Id
+PUT {{ baseURL }}/users/setActive
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+
+{
+    "active": false,
+	"id": 1
 }
 
 ###
 # Delete User By Id
 DELETE {{ baseURL }}/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+
