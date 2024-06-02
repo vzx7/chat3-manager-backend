@@ -8,7 +8,7 @@ import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 const getAuthorization = req => {
   const coockie = req.cookies['Authorization'];
   if (coockie) return coockie;
-
+  
   const header = req.header('Authorization');
   if (header) return header.split('Bearer ')[1];
 
@@ -29,7 +29,7 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
           users
         WHERE
           "id" = $1
-      `, <any>id);
+      `, [id]);
 
       if (rowCount) {
         req.user = rows[0];

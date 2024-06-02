@@ -23,7 +23,9 @@ CREATE TABLE services(
     "id" SERIAL PRIMARY KEY,
     "domain" VARCHAR(32) UNIQUE NOT NULL,
     "active" BOOLEAN,
+    "isInitialization" BOOLEAN,
     "isConfigured" BOOLEAN,
+    "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL REFERENCES users (id),
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE

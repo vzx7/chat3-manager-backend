@@ -14,9 +14,10 @@ const TOKENS_TIME = {
 
 const createTokens = async (user: User): Promise<TokenData> => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
+  
   const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN });
   const refreshTokenSaved = await saveRefreshToken(user.id, refreshToken);
-  
+
   if (!refreshTokenSaved) throw new HttpException(409, "RefreshToken could not be saved!");
   
   return { 
@@ -48,7 +49,7 @@ const saveRefreshToken = async (userId: number, refreshToken: string) => {
   let newToken;
 
   if (findToken[0].exists) {
-    await pg.query(
+    const { rows } = await pg.query(
       `
       UPDATE
         tokens
@@ -56,9 +57,11 @@ const saveRefreshToken = async (userId: number, refreshToken: string) => {
         "token" = $2
       WHERE
         "userId" = $1
+      RETURNING "token"
     `,
       [userId, refreshToken]
     );
+    newToken = rows;
   } else {
     const { rows } = await pg.query(
       `
@@ -148,12 +151,13 @@ export class AuthService {
     `,
       [email],
     );
+
     if (!rowCount) throw new HttpException(409, `This email ${email} was not found`);
 
     const isPasswordMatching: boolean = await compare(password, rows[0].password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
-
     const tokenData = await createTokens(rows[0]);
+    console.log(111, tokenData)
     return { findUser: rows[0], tokenData };
   }
 
@@ -171,7 +175,7 @@ export class AuthService {
       FROM
         tokens
       WHERE
-        userId = $1
+        "userId" = $1
       RETURNING "id"
       `,
       [id]

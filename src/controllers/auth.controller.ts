@@ -21,7 +21,9 @@ export class AuthController {
   public logIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: User = req.body;
+      
       const { tokenData: {  token, refreshToken  }, findUser } = await this.auth.login(userData);
+
       res.cookie('refreshToken', refreshToken.key, { maxAge: refreshToken.expiresIn, httpOnly: true });
       res.status(200).json({ 
         data: 
@@ -38,7 +40,7 @@ export class AuthController {
 
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: User = req.user;
+      const userData: User = req.body;
       const tokenData: { id: number } = await this.auth.logout(userData);
       res.cookie('refreshToken', null, { maxAge: 0});
       res.status(200).json({ data: { message: 'logout', is: !!tokenData?.id }});

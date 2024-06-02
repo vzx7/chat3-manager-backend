@@ -227,6 +227,12 @@ POSTGRES_PASSWORD = your_password
 POSTGRES_HOST = localhost
 POSTGRES_PORT = 5432
 POSTGRES_DB = dev
+
+# EXTERNAL API
+EXTERNAL_API_URL = api_host
+EXTERNAL_API_PORT = 4567
+EXTERNAL_API_KEY = api_key
+
 ```
 Let's build and launch
 ```bash
