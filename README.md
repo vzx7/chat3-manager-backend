@@ -50,16 +50,6 @@ It enforces a consistent style by parsing your code and re-printing it with its 
 > Palantir, the backers behind TSLint announced in 2019 that they would be deprecating TSLint in favor of supporting typescript-eslint in order to benefit the community.
 > So, migration from TSLint to ESLint.
 
-### 📗 Swagger :: API Document
-
-[Swagger](https://swagger.io/) is Simplify API development for users, teams, and enterprises with the Swagger open source and professional toolset.
-
-Easily used by Swagger to design and document APIs at scale.
-
-Start your app in development mode at `http://localhost:3000/api-docs`
-
-Modify `swagger.yaml` file to your source code.
-
 ### 🌐 REST Client :: HTTP Client Tools
 
 REST Client allows you to send HTTP request and view the response in Visual Studio Code directly.
@@ -178,7 +168,6 @@ Modify `Makefile` file to your source code.
 ├── nodemon.json
 ├── package-lock.json
 ├── package.json
-├── swagger.yaml
 └── tsconfig.json
 ```
 ## Goal
