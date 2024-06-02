@@ -8,7 +8,10 @@ Content-Type: application/json
 
 {
     "email": "example@email.com",
-	"password": "password"
+	"password": "password#@",
+    "fio": "Иван Иваныч Иванов",
+    "phone": 7897897899,
+    "bio": "Очень хороший менеджер"
 }
 
 ###
@@ -18,7 +21,7 @@ Content-Type: application/json
 
 {
     "email": "example@email.com",
-	"password": "password"
+	"password": "password#@"
 }
 
 ###

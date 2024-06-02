@@ -15,20 +15,24 @@ export class CreateUserDto {
   @IsNotEmpty()
   public fio: string;
 
-  @IsString()
-  public photo: string;
-
-  @IsString()
-  @MinLength(9)
-  @MaxLength(9)
+  @IsNumber()
+  @IsNotEmpty()
   public phone: number;
 
   @IsString()
   public bio: string;
+}
 
-  @IsNumber()
-  @IsBoolean()
-  public active: boolean;
+export class LoginUserDto {
+  @IsNotEmpty()
+  @IsEmail()
+  public email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(9)
+  @MaxLength(32)
+  public password: string;
 }
 
 export class UpdateUserDto {
@@ -41,9 +45,6 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   public fio: string;
-
-  @IsString()
-  public photo: string;
 
   @IsString()
   @MinLength(9)
