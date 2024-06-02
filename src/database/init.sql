@@ -23,6 +23,7 @@ CREATE TABLE services(
     "id" SERIAL PRIMARY KEY,
     "domain" VARCHAR(32) UNIQUE NOT NULL,
     "active" BOOLEAN,
+    "isiInitialization": BOOLEAN,
     "isConfigured" BOOLEAN,
     "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL REFERENCES users (id),
