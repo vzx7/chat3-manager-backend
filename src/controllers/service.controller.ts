@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { User } from '@interfaces/users.interface';
-import { AuthService } from '@services/auth.service';
 import { Service } from '@/interfaces/service.interface';
 import { ServiceHelper } from '@/services/service.service';
 

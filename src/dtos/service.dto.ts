@@ -1,10 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail, IsBoolean } from 'class-validator';
 
 export class CreateServiceDto {
     @IsNotEmpty()
     @IsString()
     public domain: string;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    isSSL: number;
 }
 
 class AutoCenter {

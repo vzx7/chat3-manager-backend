@@ -5,4 +5,5 @@ export interface Service {
     isConfigured?: boolean;
     userId?: number;
     isInitialized?: boolean;
+    isSSL?: boolean;
   }
