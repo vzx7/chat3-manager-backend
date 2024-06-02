@@ -15,6 +15,6 @@ export class ServiceRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post('/createService', AuthMiddleware, ValidationMiddleware(CreateServiceDto), this.service.createService);
-    this.router.post('/updateService/:id(\\d+)', AuthMiddleware, ValidationMiddleware(UpdateServiceDto), this.service.updateService);
+    this.router.put('/updateService/:id(\\d+)', AuthMiddleware, ValidationMiddleware(UpdateServiceDto), this.service.updateService);
   }
 }

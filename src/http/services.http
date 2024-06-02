@@ -15,11 +15,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
 
 ###
 # Update Service
-POST {{ baseURL }}/updateService/1
+PUT {{ baseURL }}/updateService/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzM0MTQ1LCJleHAiOjE3MTgyMzQxNDV9.h8Go4l7xt34a7v6o9CdPY010JamJ9IqoUNP6q5IVSmk
 
 {
+    "id": 1,
     "name": "Самый лучший сервис",
     "title": "Очень хороший тайтл",
     "type": 1,

@@ -5,7 +5,12 @@ import { ServiceHelper } from '@/services/service.service';
 
 export class ServiceController {
   public serviceHelper = Container.get(ServiceHelper);
-
+  /**
+   * Создание сервиса
+   * @param req 
+   * @param res 
+   * @param next 
+   */
   public createService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const serviceData: Service = req.body;
@@ -17,14 +22,17 @@ export class ServiceController {
     }
   };
 
+  /**
+   * Обнавление сервиса
+   * @param req 
+   * @param res 
+   * @param next 
+   */
   public updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    res.status(201).json({  });
     try {
-      /* const userData: User = req.body;
-      const { cookie, findUser } = await this.auth.login(userData);
-
-      res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ data: findUser, message: 'login' }); */
+      const serviceData: Service = req.body;
+      const updateServiceData: Service = await this.serviceHelper.update(serviceData);
+      res.status(200).json({ data: updateServiceData, message: 'update service' });
     } catch (error) {
       next(error);
     }

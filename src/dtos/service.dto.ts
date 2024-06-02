@@ -56,6 +56,10 @@ class Consultant {
 
 export class UpdateServiceDto {
     @IsNotEmpty()
+    @IsNumber()
+    public id: number;
+
+    @IsNotEmpty()
     @IsString()
     public name: string; 
 
