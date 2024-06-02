@@ -20,7 +20,18 @@ export const ValidationMiddleware = (type: any, skipMissingProperties = false, w
         next();
       })
       .catch((errors: ValidationError[]) => {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
+        const errorArray = [];
+
+        const setMsgError = (errorsData: ValidationError[]) => (errorsData.map((error: ValidationError) => {
+          if (error.constraints) {
+            const msg = Object.values(error.constraints);
+            errorArray.push(msg);
+          } else if (error.children) setMsgError(error.children);
+        }));
+
+        setMsgError(errors);
+        const message = errorArray.join(', ');
+
         next(new HttpException(400, message));
       });
   };

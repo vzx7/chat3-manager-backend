@@ -1,27 +1,95 @@
 import { hash, compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
-import { SECRET_KEY } from '@config';
+import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 
-const createToken = (user: User): TokenData => {
+const TOKENS_TIME = {
+  TOKEN: 15 * 60000,            //  15m
+  REFRESH_TOKEN: 15 * 86400000  // '15d'
+}
+
+const createTokens = async (user: User): Promise<TokenData> => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
-  const expiresIn: number = 60 * 60;
+  
+  const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN });
+  const refreshTokenSaved = await saveRefreshToken(user.id, refreshToken);
 
-  return { expiresIn, token: sign(dataStoredInToken, SECRET_KEY, { expiresIn }) };
+  if (!refreshTokenSaved) throw new HttpException(409, "RefreshToken could not be saved!");
+  
+  return { 
+    token: {
+      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN }),
+      expiresIn: TOKENS_TIME.TOKEN
+    },
+    refreshToken: {
+      key: refreshTokenSaved,
+      expiresIn: TOKENS_TIME.REFRESH_TOKEN 
+    }
+  };
 };
 
-const createCookie = (tokenData: TokenData): string => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
-};
+const saveRefreshToken = async (userId: number, refreshToken: string) => {
+  const { rows: findToken } = await pg.query(
+    `
+  SELECT EXISTS(
+    SELECT
+      "token"
+    FROM
+      tokens
+    WHERE
+      "userId" = $1
+  )`,
+    [userId],
+  );
+
+  let newToken;
+
+  if (findToken[0].exists) {
+    const { rows } = await pg.query(
+      `
+      UPDATE
+        tokens
+      SET
+        "token" = $2
+      WHERE
+        "userId" = $1
+      RETURNING "token"
+    `,
+      [userId, refreshToken]
+    );
+    newToken = rows;
+  } else {
+    const { rows } = await pg.query(
+      `
+      INSERT INTO
+        tokens(
+          "token",
+          "userId"
+        )
+      VALUES ($1, $2)
+      RETURNING "token"
+      `,
+      [refreshToken, userId]
+    );
+    newToken = rows;
+  }
+
+  return newToken[0]?.token;
+}
 
 @Service()
 export class AuthService {
+  /**
+   * Регистрация
+   * @param userData 
+   * @returns 
+   */
   public async signup(userData: User): Promise<User> {
-    const { email, password } = userData;
+    const { email, password, bio, fio, phone } = userData;
 
     const { rows: findUser } = await pg.query(
       `
@@ -35,31 +103,45 @@ export class AuthService {
     )`,
       [email],
     );
+
     if (findUser[0].exists) throw new HttpException(409, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(password, 10);
+    const role = 2; // manager
+    const active = true;
     const { rows: signUpUserData } = await pg.query(
       `
       INSERT INTO
         users(
           "email",
-          "password"
+          "password",
+          "fio",
+          "phone",
+          "bio",
+          "role",
+          "active"
         )
-      VALUES ($1, $2)
-      RETURNING "email", "password"
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING "id", "fio"
       `,
-      [email, hashedPassword],
+      [email, hashedPassword, fio, phone, bio, role, active],
     );
 
     return signUpUserData[0];
   }
 
-  public async login(userData: User): Promise<{ cookie: string; findUser: User }> {
+  /**
+   * Авторизация
+   * @param userData 
+   * @returns 
+   */
+  public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
 
     const { rows, rowCount } = await pg.query(
       `
       SELECT
+        "id",
         "email",
         "password"
       FROM
@@ -69,35 +151,36 @@ export class AuthService {
     `,
       [email],
     );
+
     if (!rowCount) throw new HttpException(409, `This email ${email} was not found`);
 
     const isPasswordMatching: boolean = await compare(password, rows[0].password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
-
-    const tokenData = createToken(rows[0]);
-    const cookie = createCookie(tokenData);
-    return { cookie, findUser: rows[0] };
+    const tokenData = await createTokens(rows[0]);
+    console.log(111, tokenData)
+    return { findUser: rows[0], tokenData };
   }
 
-  public async logout(userData: User): Promise<User> {
-    const { email, password } = userData;
+  /**
+   * Ралогин, удаляем рефрештокен
+   * @param userData 
+   * @returns 
+   */
+  public async logout(userData: User): Promise<{ id: number }> {
+    const { id } = userData;
 
-    const { rows, rowCount } = await pg.query(
+    const { rows: deleteToken } = await pg.query(
       `
-    SELECT
-        "email",
-        "password"
+      DELETE
       FROM
-        users
+        tokens
       WHERE
-        "email" = $1
-      AND
-        "password" = $2
-    `,
-      [email, password],
+        "userId" = $1
+      RETURNING "id"
+      `,
+      [id]
     );
-    if (!rowCount) throw new HttpException(409, "User doesn't exist");
 
-    return rows[0];
+    return deleteToken[0];
   }
 }
