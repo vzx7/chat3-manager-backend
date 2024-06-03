@@ -54,3 +54,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
     "active": true
 }
 
+###
+# Configure Service activity
+GET {{ baseURL }}/getBrands
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDMyMzQ1LCJleHAiOjE3MTgzMzIzNDV9.rWHFhj7g9Id-47kdEZSnvRZ8XlmSas-5ufXMxg7gea0
+
+{}
+

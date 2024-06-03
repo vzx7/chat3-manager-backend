@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { Service } from '@/interfaces/service.interface';
 import { ServiceHelper } from '@/services/service.service';
+import { Item } from '@/types/Brand';
 
 export class ServiceController {
   public serviceHelper = Container.get(ServiceHelper);
@@ -53,4 +54,19 @@ export class ServiceController {
         next(error);
       }
     };
+
+      /**
+   * Настроить активность сервиса
+   * @param req 
+   * @param res 
+   * @param next 
+   */
+      public getBrands = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+          const brands: Array<Item> = await this.serviceHelper.getBrands();
+          res.status(200).json({ data: brands, message: 'get brands' });
+        } catch (error) {
+          next(error);
+        }
+      };
 }

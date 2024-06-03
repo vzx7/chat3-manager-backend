@@ -3,6 +3,7 @@ import pg from '@database';
 import { Service as App } from '@/interfaces/service.interface';
 import { ExternalAPIService } from './external_api.service';
 import { HttpException } from '@/exceptions/httpException';
+import { Item } from '@/types/Brand';
 
 @Service()
 export class ServiceHelper {
@@ -87,5 +88,9 @@ export class ServiceHelper {
     );
 
     return serviceUpdateData[0];
+  }
+
+  public async getBrands(): Promise<Array<Item>> {
+    return this.externalAPIService.getBrands();
   }
 }
