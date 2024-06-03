@@ -20,3 +20,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
 {
     "id": 1
 }
+
+# Refresh token - В Bearer передаем refresh token
+GET {{ baseURL }}/refreshToken
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ2OTUzLCJleHAiOjE3MTgyNDY5NTN9.dgAVPFce9J_nacqKQX7r3XDmzfdiUamW_46P9fX0Q7Y
