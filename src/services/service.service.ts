@@ -2,6 +2,7 @@ import Container, { Service } from 'typedi';
 import pg from '@database';
 import { Service as App } from '@/interfaces/service.interface';
 import { ExternalAPIService } from './external_api.service';
+import { HttpException } from '@/exceptions/httpException';
 
 @Service()
 export class ServiceHelper {
@@ -48,6 +49,41 @@ export class ServiceHelper {
         RETURNING "id"
       `,
       [id, isConfigured]
+    );
+
+    if (!serviceUpdateData[0]) throw new HttpException(409, "Service doesn't exist");
+
+    return serviceUpdateData[0];
+  }
+
+  public async configureActivity(serviceData: App): Promise<App> {
+    const { id, active } = serviceData;
+    const { rows, rowCount } = await pg.query(
+      `
+      SELECT
+        "isConfigured"
+      FROM
+      services
+      WHERE
+        "id" = $1
+    `,
+      [id],
+    );
+
+    if (!rowCount) throw new HttpException(409, "Service doesn't exist");
+    else if (!rows[0].isConfigured) throw new HttpException(409, "The service was not configured! First set up the service!");
+
+    const { rows: serviceUpdateData } = await pg.query(
+      `
+        UPDATE
+          services
+        SET
+          "active" = $2
+        WHERE
+          "id" = $1
+        RETURNING "id"
+      `,
+      [id, active]
     );
 
     return serviceUpdateData[0];

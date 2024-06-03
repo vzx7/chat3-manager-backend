@@ -37,4 +37,20 @@ export class ServiceController {
       next(error);
     }
   };
+
+  /**
+   * Настроить активность сервиса
+   * @param req 
+   * @param res 
+   * @param next 
+   */
+    public configureServiceActivity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const serviceData: Service = req.body;
+        const updateServiceData: Service = await this.serviceHelper.configureActivity(serviceData);
+        res.status(200).json({ data: updateServiceData, message: 'set active service' });
+      } catch (error) {
+        next(error);
+      }
+    };
 }

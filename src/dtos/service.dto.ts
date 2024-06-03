@@ -101,6 +101,11 @@ export class UpdateServiceDto {
 }
 
 export class AccessServiceDto {
-    domainId: number;
+    @IsNotEmpty()
+    @IsNumber()
+    id: number;
+
+    @IsNotEmpty()
+    @IsBoolean()
     active: boolean;
   }
