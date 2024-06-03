@@ -99,3 +99,8 @@ export class UpdateServiceDto {
     @Type(() => Consultant)
     public consultant: Consultant;
 }
+
+export class AccessServiceDto {
+    domainId: number;
+    active: boolean;
+  }
