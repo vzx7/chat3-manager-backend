@@ -3,6 +3,7 @@ import { EXTERNAL_API_URL, EXTERNAL_API_PORT, EXTERNAL_API_KEY } from '@config';
 import { HttpException } from '@exceptions/httpException';
 import axios from 'axios'
 import { Service as App } from '@/interfaces/service.interface';
+import { Item } from '@/types/Brand';
 
 /**
  * Сервис для работы с внешим API
@@ -56,6 +57,26 @@ export class ExternalAPIService {
             return data.is;
         } catch (error) {
             throw new HttpException(409, `Failed configure application. Reason: ${error.message}.`);
+        }
+    }
+
+    /**
+     * Получить словарь брендов
+     * @param domain 
+     * @returns 
+     */
+    public async getBrands(): Promise<Array<Item>> {
+        try {
+            const { data } = await axios({
+                url: `${this.URL}/get-brands`,
+                method: 'get',
+                headers: {
+                    Authorization: EXTERNAL_API_KEY
+                }
+            });
+            return data.is;
+        } catch (error) {
+            throw new HttpException(409, `The request fell on obtaining data about brands. Reason: ${error.message}.`);
         }
     }
 }

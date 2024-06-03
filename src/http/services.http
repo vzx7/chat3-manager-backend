@@ -15,7 +15,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
 
 ###
 # Update Service
-PUT {{ baseURL }}/updateService/1
+PUT {{ baseURL }}/updateService
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzM0MTQ1LCJleHAiOjE3MTgyMzQxNDV9.h8Go4l7xt34a7v6o9CdPY010JamJ9IqoUNP6q5IVSmk
 
@@ -42,4 +42,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
         "description": "Хороший консультант"
     }
 }
+
+###
+# Configure Service activity
+PUT {{ baseURL }}/configureServiceActivity
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDMyMzQ1LCJleHAiOjE3MTgzMzIzNDV9.rWHFhj7g9Id-47kdEZSnvRZ8XlmSas-5ufXMxg7gea0
+
+{
+    "id": 1,
+    "active": true
+}
+
+###
+# Configure Service activity
+GET {{ baseURL }}/getBrands
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDMyMzQ1LCJleHAiOjE3MTgzMzIzNDV9.rWHFhj7g9Id-47kdEZSnvRZ8XlmSas-5ufXMxg7gea0
+
+{}
 
