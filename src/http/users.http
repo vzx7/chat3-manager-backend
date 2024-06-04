@@ -2,7 +2,7 @@
 @baseURL = http://localhost:3000
 
 ###
-# User Signup
+# User create
 POST {{ baseURL }}/users/createUser
 Content-Type: application/json
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 ###
 # Find All Users
 GET {{ baseURL }}/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDkxMDUxLCJleHAiOjE3MTgzOTEwNTF9.ENqF5D4upuqYvIvqM-c09K24uxuJnP58VsyIHok9BeQ
 ###
 # Find User By Id
 GET {{ baseURL }}/users/1
@@ -51,3 +51,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
 DELETE {{ baseURL }}/users/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
 
+# Refresh refresh token
+GET {{ baseURL }}/refreshToken
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDkzNjI2LCJleHAiOjMwMTM0OTM2MjZ9.X1agZAN0kjRtupUiofPEuDWCCoJoky4o8c5jBjdY8YA
+
+{
+    "id": 1
+}

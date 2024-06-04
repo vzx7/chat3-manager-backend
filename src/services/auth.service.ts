@@ -1,7 +1,7 @@
-import { hash, compare } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
-import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from '@config';
+import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, NODE_ENV } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
@@ -14,20 +14,20 @@ const TOKENS_TIME = {
 
 const createTokens = async (user: User): Promise<TokenData> => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
-  
+
   const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN });
   const refreshTokenSaved = await saveRefreshToken(user.id, refreshToken);
 
   if (!refreshTokenSaved) throw new HttpException(409, "RefreshToken could not be saved!");
-  
-  return { 
+
+  return {
     token: {
       key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN }),
       expiresIn: TOKENS_TIME.TOKEN
     },
     refreshToken: {
       key: refreshTokenSaved,
-      expiresIn: TOKENS_TIME.REFRESH_TOKEN 
+      expiresIn: TOKENS_TIME.REFRESH_TOKEN
     }
   };
 };
@@ -81,38 +81,64 @@ const saveRefreshToken = async (userId: number, refreshToken: string) => {
   return newToken[0]?.token;
 }
 
+const findUser = async (email: string): Promise<User> => {
+  const { rows, rowCount } = await pg.query(
+    `
+    SELECT
+      "id",
+      "email",
+      "password"
+    FROM
+      users
+    WHERE
+      "email" = $1
+  `,
+    [email],
+  );
+
+  if (!rowCount) throw new HttpException(409, `User not found`);
+
+  return rows[0];
+}
+
+const getUserData = async (user: User): Promise<{ findUser: User, tokenData: TokenData }> => {
+  const tokenData = await createTokens(user);
+  //FIXME убрать после отладки
+  if (NODE_ENV === 'development') {
+    console.log('JWT: ' + tokenData.token.key);
+    console.log('REFRESH: ' + tokenData.refreshToken.key);
+  }
+  
+  return { findUser: user, tokenData };
+}
+
 @Service()
 export class AuthService {
   /**
-   * Авторизация
+   * Выполнить авторизацию
    * @param userData 
    * @returns 
    */
   public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
 
-    const { rows, rowCount } = await pg.query(
-      `
-      SELECT
-        "id",
-        "email",
-        "password"
-      FROM
-        users
-      WHERE
-        "email" = $1
-    `,
-      [email],
-    );
+    const user = await findUser(email);
 
-    if (!rowCount) throw new HttpException(409, `This email ${email} was not found`);
-
-    const isPasswordMatching: boolean = await compare(password, rows[0].password);
+    const isPasswordMatching: boolean = await compare(password, user.password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
-    const tokenData = await createTokens(rows[0]);
-    //FIXME убрать после отладки
-    console.log('JWT: ' + tokenData.token.key);
-    return { findUser: rows[0], tokenData };
+
+    return await getUserData(user);
+  }
+
+  /**
+ * Выполнить авторизацию
+ * @param userData 
+ * @returns 
+ */
+  public async updateTokens(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
+    const { email } = userData;
+    const user = await findUser(email);
+    return await getUserData(user);
   }
 
   /**

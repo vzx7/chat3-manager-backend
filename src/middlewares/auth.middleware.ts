@@ -1,11 +1,16 @@
 import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
-import { TOKEN_SECRET_KEY } from '@config';
+import { REFRESH_TOKEN_SECRET_KEY, TOKEN_SECRET_KEY } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 
-const getAuthorization = req => {
+/**
+ * Получить токен
+ * @param req 
+ * @returns 
+ */
+const getToken = (req: RequestWithUser): string => {
   const coockie = req.cookies['Authorization'];
   if (coockie) return coockie;
   
@@ -15,16 +20,24 @@ const getAuthorization = req => {
   return null;
 };
 
-export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+/**
+ * Проверка токена
+ * @param req 
+ * @param res 
+ * @param next 
+ * @param secret 
+ */
+const _checkToken = async (req: RequestWithUser, res: Response, next: NextFunction, secret: string) => {
   try {
-    const Authorization = getAuthorization(req);
+    const token = getToken(req);
 
-    if (Authorization) {
-      const { id } = (await verify(Authorization, TOKEN_SECRET_KEY)) as DataStoredInToken;
+    if (token) {
+      const { id } = (verify(token, secret)) as DataStoredInToken;
       const { rows, rowCount } = await pg.query(`
         SELECT
-          "email",
-          "password"
+        "id",
+        "email",
+        "password"
         FROM
           users
         WHERE
@@ -43,4 +56,23 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));
   }
-};
+}
+
+/**
+ * Проверка jwt токена
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ */
+export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => _checkToken(req, res, next, TOKEN_SECRET_KEY);
+
+/**
+ * Проверка jwt refresh токена
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ */
+export const CheckRefreshToken = async (req: RequestWithUser, res: Response, next: NextFunction) => _checkToken(req, res, next, REFRESH_TOKEN_SECRET_KEY);
+

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
-import { AuthMiddleware } from '@middlewares/auth.middleware';
-import { ValidationMiddleware } from '@middlewares/validation.middleware';
+import { CheckAuth } from '@middlewares/auth.middleware';
+import { ValidateData } from '@middlewares/validation.middleware';
 import { AccessServiceDto, CreateServiceDto, UpdateServiceDto } from '@/dtos/service.dto';
 import { ServiceController } from '@/controllers/service.controller';
 
@@ -16,28 +16,28 @@ export class ServiceRoute implements Routes {
   private initializeRoutes() {
     this.router.post(
       '/createService',
-      AuthMiddleware,
-      ValidationMiddleware(CreateServiceDto),
+      CheckAuth,
+      ValidateData(CreateServiceDto),
       this.service.createService
     );
 
     this.router.put(
       '/updateService',
-      AuthMiddleware,
-      ValidationMiddleware(UpdateServiceDto),
+      CheckAuth,
+      ValidateData(UpdateServiceDto),
       this.service.updateService
     );
 
     this.router.put(
       '/configureServiceActivity',
-      AuthMiddleware,
-      ValidationMiddleware(AccessServiceDto),
+      CheckAuth,
+      ValidateData(AccessServiceDto),
       this.service.configureServiceActivity
     );
 
     this.router.get(
       '/getBrands',
-      AuthMiddleware,
+      CheckAuth,
       this.service.getBrands
     );
   }

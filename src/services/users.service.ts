@@ -82,7 +82,6 @@ export class UserService {
   }
 
   public async updateUser(userId: number, userData: User): Promise<User[]> {
-    console.log(userId, 999)
     const { rows: findUser } = await pg.query(
       `
       SELECT EXISTS(
