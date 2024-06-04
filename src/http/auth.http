@@ -7,21 +7,24 @@ POST {{ baseURL }}/login
 Content-Type: application/json
 
 {
-    "email": "example1113434@email.com",
-	"password": "password!@2"
+    "email": "example@email.com",
+	"password": "password#@"
 }
+
 
 ###
 # User Logout
 POST {{ baseURL }}/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ2OTUzLCJleHAiOjE3MTgyNDY5NTN9.dgAVPFce9J_nacqKQX7r3XDmzfdiUamW_46P9fX0Q7Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDkxMDUxLCJleHAiOjE3MTgzOTEwNTF9.ENqF5D4upuqYvIvqM-c09K24uxuJnP58VsyIHok9BeQ
 
 {
     "id": 1
 }
 
-# Refresh token - В Bearer передаем refresh token
+###
+# User Login
 GET {{ baseURL }}/refreshToken
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ2OTUzLCJleHAiOjE3MTgyNDY5NTN9.dgAVPFce9J_nacqKQX7r3XDmzfdiUamW_46P9fX0Q7Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDk0MDg5LCJleHAiOjMwMTM0OTQwODl9.FEqxRWGD9mmQEk4dy23AR6pxMv56rOqs4zILspU6dPM
+

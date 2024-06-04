@@ -37,4 +37,23 @@ export class AuthController {
       next(error);
     }
   };
+
+  public refreshToken = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: User = req.user;
+      const { tokenData: {  token, refreshToken  }, findUser } = await this.auth.updateTokens(userData);
+
+      res.cookie('refreshToken', refreshToken.key, { maxAge: refreshToken.expiresIn, httpOnly: true });
+      res.status(200).json({ 
+        data: 
+        { 
+          message: 'login', 
+          token: token.key, 
+          user: { role: findUser.role, fio: findUser.fio, id: findUser.id } 
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
