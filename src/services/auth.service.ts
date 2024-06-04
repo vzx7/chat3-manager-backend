@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
-import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from '@config';
+import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, NODE_ENV } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
@@ -104,7 +104,11 @@ const findUser = async (email: string): Promise<User> => {
 const getUserData = async (user: User): Promise<{ findUser: User, tokenData: TokenData }> => {
   const tokenData = await createTokens(user);
   //FIXME убрать после отладки
-  console.log('JWT: ' + tokenData.token.key);
+  if (NODE_ENV === 'development') {
+    console.log('JWT: ' + tokenData.token.key);
+    console.log('REFRESH: ' + tokenData.refreshToken.key);
+  }
+  
   return { findUser: user, tokenData };
 }
 

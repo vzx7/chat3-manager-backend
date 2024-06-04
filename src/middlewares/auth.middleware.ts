@@ -30,7 +30,6 @@ const getToken = (req: RequestWithUser): string => {
 const _checkToken = async (req: RequestWithUser, res: Response, next: NextFunction, secret: string) => {
   try {
     const token = getToken(req);
-    console.log(token)
 
     if (token) {
       const { id } = (verify(token, secret)) as DataStoredInToken;
@@ -47,7 +46,6 @@ const _checkToken = async (req: RequestWithUser, res: Response, next: NextFuncti
 
       if (rowCount) {
         req.user = rows[0];
-        console.log(req.user)
         next();
       } else {
         next(new HttpException(401, 'Wrong authentication token'));
