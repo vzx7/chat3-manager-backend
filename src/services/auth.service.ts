@@ -81,7 +81,7 @@ const saveRefreshToken = async (userId: number, refreshToken: string) => {
   return newToken[0]?.token;
 }
 
-const findUser = async (email: string): Promise<User> => {
+const findUser = async (where: string, param: string | number): Promise<User> => {
   const { rows, rowCount } = await pg.query(
     `
     SELECT
@@ -93,9 +93,8 @@ const findUser = async (email: string): Promise<User> => {
     FROM
       users
     WHERE
-      "email" = $1
-  `,
-    [email],
+      ${where}`,
+    [param],
   );
 
   if (!rowCount) throw new HttpException(409, `User not found`);
@@ -124,7 +123,7 @@ export class AuthService {
   public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
     
-    const user = await findUser(email);
+    const user = await findUser('"email" = $1', email);
 
     const isPasswordMatching: boolean = await compare(password, user.password);
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
@@ -137,9 +136,23 @@ export class AuthService {
  * @param userData 
  * @returns 
  */
-  public async updateTokens(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
-    const { email } = userData;
-    const user = await findUser(email);
+  public async updateTokens(refreshToken: string): Promise<{ findUser: User, tokenData: TokenData }> {
+    const { rows: findToken } = await pg.query(
+      `
+    SELECT EXISTS(
+      SELECT
+        "userId"
+      FROM
+        tokens
+      WHERE
+        "token" = $1
+    )`,
+      [refreshToken],
+    );
+  
+    if(!findToken[0].exists) throw new HttpException(409, "RefreshToken not faund");
+
+    const user = await findUser('"id" = $1', findToken[0].id);
     return await getUserData(user);
   }
 
