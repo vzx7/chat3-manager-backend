@@ -14,8 +14,22 @@ export class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post('/login', ValidateData(LoginUserDto), this.auth.logIn);
-    this.router.post('/logout', CheckAuth, this.auth.logOut);
-    this.router.get('/refreshToken', CheckRefreshToken, this.auth.refreshToken);
+    this.router.post(
+      '/login', 
+      ValidateData(LoginUserDto), 
+      this.auth.logIn
+    );
+    
+    this.router.post(
+      '/logout', 
+      CheckAuth, 
+      this.auth.logOut
+    );
+    
+    this.router.get(
+      '/refreshToken', 
+      CheckRefreshToken, 
+      this.auth.refreshToken
+    );
   }
 }

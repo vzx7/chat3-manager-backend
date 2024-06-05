@@ -86,7 +86,9 @@ const findUser = async (email: string): Promise<User> => {
     `
     SELECT
       "id",
-      "email",
+      "fio",
+      "role",
+      "active",
       "password"
     FROM
       users
@@ -97,7 +99,7 @@ const findUser = async (email: string): Promise<User> => {
   );
 
   if (!rowCount) throw new HttpException(409, `User not found`);
-
+  console.log(rows[0])
   return rows[0];
 }
 
@@ -121,7 +123,7 @@ export class AuthService {
    */
   public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
-
+    
     const user = await findUser(email);
 
     const isPasswordMatching: boolean = await compare(password, user.password);

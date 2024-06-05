@@ -15,11 +15,36 @@ export class UserRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, CheckAuth, this.user.getUsers);
-    this.router.get(`${this.path}/:id(\\d+)`, CheckAuth, this.user.getUserById);
-    this.router.post(`${this.path}/createUser`, CheckAuth, ValidateData(CreateUserDto), this.user.createUser);
-    this.router.put(`${this.path}/:id(\\d+)`, CheckAuth, ValidateData(UpdateUserDto, true), this.user.updateUser);
-    this.router.put(`${this.path}/setActive`, CheckAuth, ValidateData(AccessUserDto, true), this.user.setActive);
-    this.router.delete(`${this.path}/:id(\\d+)`, CheckAuth, this.user.deleteUser);
+    this.router.get(
+      `${this.path}/:id(\\d+)`, 
+      CheckAuth, 
+      this.user.getUserById
+    );
+
+    this.router.post(
+      `${this.path}/createUser`, 
+      CheckAuth, 
+      ValidateData(CreateUserDto), 
+      this.user.createUser
+    );
+
+    this.router.put(
+      `${this.path}/:id(\\d+)`, 
+      CheckAuth, 
+      ValidateData(UpdateUserDto, true), 
+      this.user.updateUser
+    );
+
+    this.router.put(
+      `${this.path}/setActive`, 
+      CheckAuth, ValidateData(AccessUserDto, true), 
+      this.user.setActive
+    );
+    
+    this.router.delete(
+      `${this.path}/:id(\\d+)`, 
+      CheckAuth, 
+      this.user.deleteUser
+    );
   }
 }

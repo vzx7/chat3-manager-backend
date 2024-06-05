@@ -54,16 +54,6 @@ export class UserService {
   }
 
 
-  public async findAllUser(): Promise<User[]> {
-    const { rows } = await pg.query(`
-    SELECT
-      *
-    FROM
-      users
-    `);
-    return rows;
-  }
-
   public async findUserById(userId: number): Promise<User> {
     const { rows, rowCount } = await pg.query(
       `
@@ -81,7 +71,7 @@ export class UserService {
     return rows[0];
   }
 
-  public async updateUser(userId: number, userData: User): Promise<User[]> {
+  public async updateUser(userId: number, userData: User): Promise<User> {
     const { rows: findUser } = await pg.query(
       `
       SELECT EXISTS(
@@ -143,10 +133,10 @@ export class UserService {
       [userId, ...params],
     );
 
-    return updateUserData;
+    return updateUserData[0];
   }
 
-  public async deleteUser(userId: number): Promise<User[]> {
+  public async deleteUser(userId: number): Promise<User> {
     const { rows: findUser } = await pg.query(
       `
       SELECT EXISTS(
@@ -173,10 +163,10 @@ export class UserService {
       [userId],
     );
 
-    return deleteUserData;
+    return deleteUserData[0];
   }
 
-  public async setActiveUser(userData: User): Promise<User[]> {
+  public async setActiveUser(userData: User): Promise<User> {
     const { id, active } = userData;
     const { rows: findUser } = await pg.query(
       `
@@ -205,6 +195,6 @@ export class UserService {
       [id, active],
     );
 
-    return updateUserData;
+    return updateUserData[0];
   }
 }
