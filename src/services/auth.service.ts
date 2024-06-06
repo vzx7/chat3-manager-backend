@@ -150,7 +150,7 @@ export class AuthService {
       [refreshToken],
     );
   
-    if(!findToken[0].exists) throw new HttpException(409, "RefreshToken not faund");
+    if(!findToken[0].exists) throw new HttpException(401, "RefreshToken not faund");
 
     const user = await findUser('"id" = $1', findToken[0].id);
     return await getUserData(user);

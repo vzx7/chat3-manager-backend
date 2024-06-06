@@ -40,5 +40,11 @@ export class ServiceRoute implements Routes {
       CheckAuth,
       this.service.getBrands
     );
+
+    this.router.get(
+      '/getServices',
+      CheckAuth,
+      this.service.getServices
+    );
   }
 }

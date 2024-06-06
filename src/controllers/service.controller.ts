@@ -68,11 +68,11 @@ export class ServiceController {
   };
 
   /**
-* Настроить активность сервиса
-* @param req 
-* @param res 
-* @param next 
-*/
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
   public getBrands = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const data: Array<Item> = await this.serviceHelper.getBrands();
@@ -85,4 +85,23 @@ export class ServiceController {
       next(error);
     }
   };
+
+ /**
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
+    public getServices = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const data: Array<Item> = await this.serviceHelper.getBrands();
+        const response: ResponseData = {
+          is: true,
+          data
+        };
+        res.status(200).json(response);
+      } catch (error) {
+        next(error);
+      }
+    };
 }

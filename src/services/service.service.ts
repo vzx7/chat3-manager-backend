@@ -90,7 +90,25 @@ export class ServiceHelper {
     return serviceUpdateData[0];
   }
 
-  public async getBrands(): Promise<Array<Item>> {
+  public async getBrands(): Promise<Array<App>> {
     return this.externalAPIService.getBrands();
+  }
+
+  /**
+   * Получить все сервисы, которые нуждаются в конфигурации
+   * @returns 
+   */
+  public async getServices(): Promise<Array<Item>> {
+    const { rows } = await pg.query(
+      `
+      SELECT
+        *
+      FROM
+        services
+      WHERE
+        "isConfigured" = $1
+    `, [false]);
+
+    return rows;
   }
 }
