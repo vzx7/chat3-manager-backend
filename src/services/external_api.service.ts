@@ -3,7 +3,7 @@ import { EXTERNAL_API_URL, EXTERNAL_API_PORT, EXTERNAL_API_KEY } from '@config';
 import { HttpException } from '@exceptions/httpException';
 import axios from 'axios'
 import { Service as App } from '@/interfaces/service.interface';
-import { Item } from '@/types/Brand';
+import { Item } from '@/types/Item';
 
 /**
  * Сервис для работы с внешим API

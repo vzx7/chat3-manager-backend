@@ -94,7 +94,7 @@ export class ServiceController {
   */
     public getServices = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-        const data: Array<Item> = await this.serviceHelper.getBrands();
+        const data: Array<Service> = await this.serviceHelper.getServices();
         const response: ResponseData = {
           is: true,
           data

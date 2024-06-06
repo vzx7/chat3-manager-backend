@@ -3,7 +3,7 @@ import pg from '@database';
 import { Service as App } from '@/interfaces/service.interface';
 import { ExternalAPIService } from './external_api.service';
 import { HttpException } from '@/exceptions/httpException';
-import { Item } from '@/types/Brand';
+import { Item } from '@/types/Item';
 
 @Service()
 export class ServiceHelper {
@@ -90,7 +90,7 @@ export class ServiceHelper {
     return serviceUpdateData[0];
   }
 
-  public async getBrands(): Promise<Array<App>> {
+  public async getBrands(): Promise<Array<Item>> {
     return this.externalAPIService.getBrands();
   }
 
@@ -98,7 +98,7 @@ export class ServiceHelper {
    * Получить все сервисы, которые нуждаются в конфигурации
    * @returns 
    */
-  public async getServices(): Promise<Array<Item>> {
+  public async getServices(): Promise<Array<App>> {
     const { rows } = await pg.query(
       `
       SELECT

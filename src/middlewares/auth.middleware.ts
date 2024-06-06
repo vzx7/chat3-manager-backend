@@ -4,6 +4,7 @@ import { REFRESH_TOKEN_SECRET_KEY, TOKEN_SECRET_KEY } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
+import { Role } from '@/types/Role';
 
 /**
  * Получить токен
@@ -21,23 +22,24 @@ const getToken = (req: RequestWithUser): string => {
 };
 
 /**
- * Проверка токена
+ * Проверка jwt токена
  * @param req 
  * @param res 
  * @param next 
- * @param secret 
+ * @returns 
  */
-const _checkToken = async (req: RequestWithUser, res: Response, next: NextFunction, secret: string) => {
+export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const token = getToken(req);
 
     if (token) {
-      const { id } = (verify(token, secret)) as DataStoredInToken;
+      const { id } = (verify(token, TOKEN_SECRET_KEY)) as DataStoredInToken;
       const { rows, rowCount } = await pg.query(`
         SELECT
         "id",
         "email",
         "password"
+        "role"
         FROM
           users
         WHERE
@@ -56,14 +58,39 @@ const _checkToken = async (req: RequestWithUser, res: Response, next: NextFuncti
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));
   }
-}
+};
 
 /**
- * Проверка jwt токена
+ * Проверка роли, если запрос несанкционированный, нужно заблокировать пользователя и сделать logout
  * @param req 
  * @param res 
  * @param next 
- * @returns 
  */
-export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => _checkToken(req, res, next, TOKEN_SECRET_KEY);
+export const CheckAdmRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  if (req.user.role !== Role.admin) {
+    await pg.query(
+      `
+      UPDATE
+        users
+      SET
+        "active" = $2
+      WHERE
+        "id" = $1
+    `,
+      [req.user.id, false],
+    );
+    await pg.query(
+      `
+      DELETE
+      FROM
+        tokens
+      WHERE
+        "userId" = $1
+      RETURNING "id"
+      `,
+      [req.user.id]
+    );
+    res.cookie('refreshToken', null, { maxAge: 0});
+  }
+}
 
