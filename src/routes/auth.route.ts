@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AuthController } from '@controllers/auth.controller';
 import { Routes } from '@interfaces/routes.interface';
-import { CheckAuth, CheckRefreshToken } from '@middlewares/auth.middleware';
+import { CheckAuth } from '@middlewares/auth.middleware';
 import { ValidateData } from '@middlewares/validation.middleware';
 import { LoginUserDto } from '@/dtos/users.dto';
 
@@ -28,7 +28,6 @@ export class AuthRoute implements Routes {
     
     this.router.get(
       '/refreshToken', 
-      CheckRefreshToken, 
       this.auth.refreshToken
     );
   }

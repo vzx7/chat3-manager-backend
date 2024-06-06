@@ -67,12 +67,3 @@ const _checkToken = async (req: RequestWithUser, res: Response, next: NextFuncti
  */
 export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => _checkToken(req, res, next, TOKEN_SECRET_KEY);
 
-/**
- * Проверка jwt refresh токена
- * @param req 
- * @param res 
- * @param next 
- * @returns 
- */
-export const CheckRefreshToken = async (req: RequestWithUser, res: Response, next: NextFunction) => _checkToken(req, res, next, REFRESH_TOKEN_SECRET_KEY);
-

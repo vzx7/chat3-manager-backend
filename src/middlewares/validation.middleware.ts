@@ -32,7 +32,7 @@ export const ValidateData = (type: any, skipMissingProperties = false, whitelist
         setMsgError(errors);
         const message = errorArray.join(', ');
 
-        next(new HttpException(400, message));
+        next(new HttpException(200, message));
       });
   };
 };
