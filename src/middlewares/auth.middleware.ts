@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
-import { REFRESH_TOKEN_SECRET_KEY, TOKEN_SECRET_KEY } from '@config';
+import { TOKEN_SECRET_KEY } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
@@ -14,7 +14,7 @@ import { Role } from '@/types/Role';
 const getToken = (req: RequestWithUser): string => {
   const coockie = req.cookies['Authorization'];
   if (coockie) return coockie;
-  
+
   const header = req.header('Authorization');
   if (header) return header.split('Bearer ')[1];
 
