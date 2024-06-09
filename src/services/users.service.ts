@@ -58,7 +58,11 @@ export class UserService {
     const { rows, rowCount } = await pg.query(
       `
     SELECT
-      *
+      "id",
+      "email",
+      "fio",
+      "phone",
+      "bio"
     FROM
       users
     WHERE

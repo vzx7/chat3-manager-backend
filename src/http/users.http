@@ -17,17 +17,17 @@ Content-Type: application/json
 ###
 # Find All Users
 GET {{ baseURL }}/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3NDkxMDUxLCJleHAiOjE3MTgzOTEwNTF9.ENqF5D4upuqYvIvqM-c09K24uxuJnP58VsyIHok9BeQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3OTUzODE5LCJleHAiOjE3MzA4ODk4MTl9.SvI-vdDr_wXItXtEzEhgoFOMaDfp0eDOKxxbxiAscz0
 ###
 # Find User By Id
 GET {{ baseURL }}/users/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3OTU0MzAzLCJleHAiOjE3MTc5NTUyMDN9.V8Fu2PC8otEY1F0FI8F58waV-m9Jd5KkRShBQ1ng-Xw
 
 ###
 # Modify User By Id
 PUT {{ baseURL }}/users/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzQ5OTQ1LCJleHAiOjE3MTgyNDk5NDV9.Jmphy_RVggOuo7UknPejahByvHNFZApqlkkeQi7KoVc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3OTU0MzAzLCJleHAiOjE3MTc5NTUyMDN9.V8Fu2PC8otEY1F0FI8F58waV-m9Jd5KkRShBQ1ng-Xw
 
 {
     "email": "example1113434@email.com",

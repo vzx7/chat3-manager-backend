@@ -23,8 +23,7 @@ export class AuthController {
       };
       
       const { refreshToken } = tokenData;
-
-      res.cookie('refreshToken', refreshToken.key, { maxAge: refreshToken.expiresIn, httpOnly: true });
+      res.cookie('refreshToken', refreshToken.key, { expires: new Date(Date.now() + refreshToken.expiresIn), httpOnly: true });
       res.status(200).json(response);
     } catch (error) {
       next(error);
