@@ -31,7 +31,7 @@ const getToken = (req: RequestWithUser): string => {
 export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const token = getToken(req);
-    console.log(verify(token, TOKEN_SECRET_KEY), 9999)
+
     if (token) {
       const { id } = (verify(token, TOKEN_SECRET_KEY)) as DataStoredInToken;
 

@@ -8,7 +8,7 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 
 const TOKENS_TIME = {
-  TOKEN: 15 * 60,            //  15m
+  TOKEN: 3 * 60,            //  15m
   REFRESH_TOKEN: 15 * 862400  // '15d'
 }
 
@@ -96,9 +96,9 @@ const findUser = async (where: string, param: string | number): Promise<User> =>
       ${where}`,
     [param],
   );
-
+console.log(where, param)
   if (!rowCount) throw new HttpException(409, `User not found`);
-  console.log(rows[0])
+
   return rows[0];
 }
 
@@ -137,22 +137,21 @@ export class AuthService {
  * @returns 
  */
   public async updateTokens(refreshToken: string): Promise<{ findUser: User, tokenData: TokenData }> {
-    const { rows: findToken } = await pg.query(
+    const { rows: findToken, rowCount } = await pg.query(
       `
-    SELECT EXISTS(
       SELECT
-        "userId"
+        *
       FROM
         tokens
       WHERE
         "token" = $1
-    )`,
+    `,
       [refreshToken],
     );
-  
-    if(!findToken[0].exists) throw new HttpException(401, "RefreshToken not faund");
 
-    const user = await findUser('"id" = $1', findToken[0].id);
+    if(!rowCount) throw new HttpException(401, "RefreshToken not faund");
+
+    const user = await findUser('"id" = $1', findToken[0].userId);
     return await getUserData(user);
   }
 

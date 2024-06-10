@@ -20,7 +20,7 @@ export class AuthRoute implements Routes {
       this.auth.logIn
     );
     
-    this.router.post(
+    this.router.get(
       '/logout', 
       CheckAuth, 
       this.auth.logOut
