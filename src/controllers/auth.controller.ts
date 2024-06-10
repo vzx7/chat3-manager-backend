@@ -23,7 +23,9 @@ export class AuthController {
       };
       
       const { refreshToken } = tokenData;
-      res.cookie('refreshToken', refreshToken.key, { expires: new Date(Date.now() + refreshToken.expiresIn), httpOnly: true });
+      res.cookie('test', 123, { maxAge: refreshToken.expiresIn * 30 });
+      res.cookie('refreshToken', refreshToken.key, { httpOnly: true, maxAge: refreshToken.expiresIn * 30 });
+      console.log(res)
       res.status(200).json(response);
     } catch (error) {
       next(error);
@@ -49,6 +51,7 @@ export class AuthController {
   public refreshToken = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { refreshToken } = req.cookies;
+      console.log(req.cookies)
       const { tokenData, findUser } = await this.auth.updateTokens(refreshToken);
       delete findUser.password;
       const response: ResponseData = {
