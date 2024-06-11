@@ -207,7 +207,7 @@ LOG_FORMAT = dev
 LOG_DIR = ../logs
 
 # CORS
-ORIGIN = *
+ORIGIN = your_host
 CREDENTIALS = true
 
 # DATABASE

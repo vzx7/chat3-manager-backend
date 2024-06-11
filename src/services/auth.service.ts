@@ -96,7 +96,7 @@ const findUser = async (where: string, param: string | number): Promise<User> =>
       ${where}`,
     [param],
   );
-console.log(where, param)
+
   if (!rowCount) throw new HttpException(409, `User not found`);
 
   return rows[0];
@@ -109,8 +109,18 @@ const getUserData = async (user: User): Promise<{ findUser: User, tokenData: Tok
     console.log('JWT: ' + tokenData.token.key);
     console.log('REFRESH: ' + tokenData.refreshToken.key);
   }
-  
+
   return { findUser: user, tokenData };
+}
+
+const resetToken = (user: User) => {
+  const dataStoredInToken: DataStoredInToken = { id: user.id };
+
+  return {
+    token: {
+      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN })
+    }
+  };
 }
 
 @Service()
@@ -122,7 +132,7 @@ export class AuthService {
    */
   public async login(userData: User): Promise<{ findUser: User, tokenData: TokenData }> {
     const { email, password } = userData;
-    
+
     const user = await findUser('"email" = $1', email);
 
     const isPasswordMatching: boolean = await compare(password, user.password);
@@ -132,15 +142,15 @@ export class AuthService {
   }
 
   /**
- * Выполнить авторизацию
- * @param userData 
- * @returns 
- */
-  public async updateTokens(refreshToken: string): Promise<{ findUser: User, tokenData: TokenData }> {
+   * Перевыпуск jwt token
+   * @param userData 
+   * @returns 
+   */
+  public async updateToken(refreshToken: string): Promise<{ token: { key: string } }> {
     const { rows: findToken, rowCount } = await pg.query(
       `
       SELECT
-        *
+        "userId"
       FROM
         tokens
       WHERE
@@ -149,10 +159,10 @@ export class AuthService {
       [refreshToken],
     );
 
-    if(!rowCount) throw new HttpException(401, "RefreshToken not faund");
+    if (!rowCount) throw new HttpException(401, "RefreshToken not faund");
 
     const user = await findUser('"id" = $1', findToken[0].userId);
-    return await getUserData(user);
+    return resetToken(user);
   }
 
   /**
