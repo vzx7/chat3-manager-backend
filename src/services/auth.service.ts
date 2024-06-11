@@ -8,7 +8,7 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 
 const TOKENS_TIME = {
-  TOKEN: 2 * 60,            //  15m
+  TOKEN: 15 * 60,            //  15m
   REFRESH_TOKEN: 15 * 862400  // '15d'
 }
 

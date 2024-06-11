@@ -27,6 +27,7 @@ CREATE TABLE services(
     "isConfigured" BOOLEAN,
     "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL,
+    "appConfigurationId" INTEGER,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );

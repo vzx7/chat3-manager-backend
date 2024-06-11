@@ -1,6 +1,6 @@
 import Container, { Service } from 'typedi';
 import pg from '@database';
-import { Service as App } from '@/interfaces/service.interface';
+import { Service as App, AppConfig } from '@/interfaces/service.interface';
 import { ExternalAPIService } from './external_api.service';
 import { HttpException } from '@/exceptions/httpException';
 import { Item } from '@/types/Item';
@@ -13,6 +13,7 @@ export class ServiceHelper {
 
     const active = true;
     const isConfigured = false;//await this.externalAPIService.checkApplicationByDomain(domain);
+    const appConfigurationId = null;//await this.externalAPIService.checkApplicationByDomain(domain);
     const isiInitialization = false;
 
     const { rows: appData } = await pg.query(
@@ -23,13 +24,14 @@ export class ServiceHelper {
           "active",
           "isInitialization",
           "isConfigured",
+          "appConfigurationId"
           "isSSL",
           "userId"
         )
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING "id", "isConfigured"
       `,
-      [domain, active, isiInitialization, isConfigured, isSSL, userId],
+      [domain, active, isiInitialization, isConfigured, appConfigurationId, isSSL, userId],
     );
 
     return appData[0];
@@ -111,4 +113,25 @@ export class ServiceHelper {
 
     return rows;
   }
-}
+
+    /**
+   * Получить все сервисы, которые нуждаются в конфигурации
+   * @returns 
+   */
+    public async getServiceById(id: number): Promise<AppConfig & App> {
+      const { rows: appSet, rowCount }: { rows: App[], rowCount: number } = await pg.query(
+        `
+        SELECT
+          *
+        FROM
+          services
+        WHERE
+          "id" = $1
+      `, [id]);
+      if (!rowCount) throw new HttpException(409, "Service not found");
+      const appConfig: AppConfig = {} as AppConfig//await this.externalAPIService.getApplicationConfig(appSet[0].appConfigurationId);
+      const appFullData: AppConfig & App = { ...appConfig, domain: appSet[0].domain };
+      
+      return appFullData;
+    }
+  }

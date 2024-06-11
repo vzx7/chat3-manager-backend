@@ -33,7 +33,7 @@ export class ExternalAPIService {
                 },
                 data: { domain }
             });
-            return data.is;
+            return data;
         } catch (error) {
             throw new HttpException(409, `Failed to check domain. Reason: ${error.message}.`);
         }
@@ -77,6 +77,27 @@ export class ExternalAPIService {
             return data.is;
         } catch (error) {
             throw new HttpException(409, `The request fell on obtaining data about brands. Reason: ${error.message}.`);
+        }
+    }
+
+    /**
+     * Получить конфигурацию прниложения
+     * @param domain 
+     * @returns 
+     */
+    public async getApplicationConfig(id: number): Promise<Array<Item>> {
+
+        try {
+            const { data } = await axios({
+                url: `${this.URL}/get-app-configuration/${id}`,
+                method: 'get',
+                headers: {
+                    Authorization: EXTERNAL_API_KEY
+                }
+            });
+            return data;
+        } catch (error) {
+            throw new HttpException(409, `The request fell on obtaining data app configuration. Reason: ${error.message}.`);
         }
     }
 }

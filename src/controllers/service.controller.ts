@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { Service } from '@/interfaces/service.interface';
+import { AppConfig, Service } from '@/interfaces/service.interface';
 import { ServiceHelper } from '@/services/service.service';
 import { Item } from '@/types/Item';
 import { ResponseData } from '@/types/ResponseData';
@@ -95,6 +95,26 @@ export class ServiceController {
     public getServices = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
         const data: Array<Service> = await this.serviceHelper.getServices();
+        const response: ResponseData = {
+          is: true,
+          data
+        };
+        res.status(200).json(response);
+      } catch (error) {
+        next(error);
+      }
+    };
+
+     /**
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
+     public getService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const serviceId = Number(req.params.id);
+        const data: Service & AppConfig = await this.serviceHelper.getServiceById(serviceId);
         const response: ResponseData = {
           is: true,
           data

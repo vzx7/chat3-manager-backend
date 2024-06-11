@@ -47,5 +47,11 @@ export class ServiceRoute implements Routes {
       CheckAuth,
       this.service.getServices
     );
+
+    this.router.get(
+      `/getService/:id(\\d+)`,
+      CheckAuth,
+      this.service.getService
+    );
   }
 }
