@@ -50,13 +50,11 @@ export class AuthController {
     try {
       const { refreshToken } = req.cookies;
 
-      const { tokenData, findUser } = await this.auth.updateTokens(refreshToken);
-      delete findUser.password;
+      const { tokenData } = await this.auth.updateTokens(refreshToken);
       const response: ResponseData = {
         is: true,
         data: { 
-          tokens: tokenData, 
-          user: findUser
+          token: tokenData.token.key
         }
       };
       
