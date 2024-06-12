@@ -24,7 +24,7 @@ export class ServiceHelper {
           "active",
           "isInitialization",
           "isConfigured",
-          "appConfigurationId"
+          "appConfigurationId",
           "isSSL",
           "userId"
         )
