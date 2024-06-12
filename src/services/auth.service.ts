@@ -1,34 +1,29 @@
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
-import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, NODE_ENV } from '@config';
+import { TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, NODE_ENV, REFRESH_TOKEN_TIME, TOKEN_TIME } from '@config';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { verify } from 'jsonwebtoken';
 
-const TOKENS_TIME = {
-  TOKEN: '15m',            
-  REFRESH_TOKEN: '15d'
-}
-
 const createTokens = async (user: User): Promise<TokenData> => {
   const dataStoredInToken: DataStoredInToken = { id: user.id };
 
-  const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.REFRESH_TOKEN });
+  const refreshToken = sign(dataStoredInToken, REFRESH_TOKEN_SECRET_KEY, { expiresIn: REFRESH_TOKEN_TIME });
   const refreshTokenSaved = await saveRefreshToken(user.id, refreshToken);
 
   if (!refreshTokenSaved) throw new HttpException(409, "RefreshToken could not be saved!");
 
   return {
     token: {
-      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN }),
-      expiresIn: TOKENS_TIME.TOKEN
+      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKEN_TIME }),
+      expiresIn: TOKEN_TIME
     },
     refreshToken: {
       key: refreshTokenSaved,
-      expiresIn: TOKENS_TIME.REFRESH_TOKEN
+      expiresIn: REFRESH_TOKEN_TIME
     }
   };
 };
@@ -119,7 +114,7 @@ const resetToken = (user: User) => {
 
   return {
     token: {
-      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKENS_TIME.TOKEN })
+      key: sign(dataStoredInToken, TOKEN_SECRET_KEY, { expiresIn: TOKEN_TIME })
     }
   };
 }

@@ -21,6 +21,20 @@ export class UserController {
     }
   };
 
+  public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data: User[] = await this.user.findManagers();
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
 
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

@@ -15,6 +15,13 @@ export class UserRoute implements Routes {
   }
 
   private initializeRoutes() {
+
+    this.router.get(
+      this.path, 
+      CheckAuth, 
+      this.user.getUsers
+    );
+
     this.router.get(
       `${this.path}/:id(\\d+)`, 
       CheckAuth, 
@@ -23,8 +30,8 @@ export class UserRoute implements Routes {
 
     this.router.post(
       `${this.path}/createUser`, 
-      //CheckAuth,
-      //CheckAdmRole,
+      CheckAuth,
+      CheckAdmRole,
       ValidateData(CreateUserDto), 
       this.user.createUser
     );

@@ -3,6 +3,7 @@ import { Service } from 'typedi';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { User } from '@interfaces/users.interface';
+import { Role } from '@/types/Role';
 
 @Service()
 export class UserService {
@@ -54,6 +55,29 @@ export class UserService {
   }
 
 
+  public async findManagers(): Promise<User[]> {
+    const { rows, rowCount } = await pg.query(
+      `
+    SELECT
+      "id",
+      "email",
+      "fio",
+      "phone",
+      "bio",
+      "active"
+    FROM
+      users
+    WHERE
+      role = $1
+    ORDER BY active ASC
+    `,
+      [Role.manager],
+    );
+    if (!rowCount) throw new HttpException(409, "Managers not found");
+
+    return rows;
+  }
+
   public async findUserById(userId: number): Promise<User> {
     const { rows, rowCount } = await pg.query(
       `
@@ -92,12 +116,13 @@ export class UserService {
     if (!findUser[0].exists) throw new HttpException(409, "User doesn't exist");
 
     const { email, password, fio, phone, bio } = userData;
-    let hashedPassword: string;
+
     let queryParams = [];
     const params = [];
     let iterator = 2;
 
     if (password) {
+      let hashedPassword: string;
       hashedPassword = await hash(password, 10);
       queryParams.push('"password" = $' + iterator++);
       params.push(hashedPassword);
