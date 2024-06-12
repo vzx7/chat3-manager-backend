@@ -3,7 +3,7 @@ import { User } from '@interfaces/users.interface';
 
 type TokenSet = {
   key: string,
-  expiresIn: number
+  expiresIn: string
 }
 
 export interface DataStoredInToken {

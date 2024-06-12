@@ -94,7 +94,7 @@ export class ServiceController {
   */
     public getServices = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-        const data: Array<Service> = await this.serviceHelper.getServices();
+        const data: Array<Service> = await this.serviceHelper.getServices((req as any).user);
         const response: ResponseData = {
           is: true,
           data
@@ -105,7 +105,7 @@ export class ServiceController {
       }
     };
 
-     /**
+  /**
   * Настроить активность сервиса
   * @param req 
   * @param res 

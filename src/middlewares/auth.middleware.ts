@@ -39,7 +39,7 @@ export const CheckAuth = async (req: RequestWithUser, res: Response, next: NextF
         SELECT
         "id",
         "email",
-        "password"
+        "password",
         "role"
         FROM
           users
@@ -92,6 +92,8 @@ export const CheckAdmRole = async (req: RequestWithUser, res: Response, next: Ne
       [req.user.id]
     );
     res.cookie('refreshToken', null, { maxAge: 0});
+    next(new HttpException(401, 'Authorization violated, role substitution...'));
   }
+  next();
 }
 

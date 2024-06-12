@@ -9,8 +9,8 @@ import { User } from '@interfaces/users.interface';
 import { verify } from 'jsonwebtoken';
 
 const TOKENS_TIME = {
-  TOKEN: 15 * 60,            //  15m
-  REFRESH_TOKEN: 15 * 862400  // '15d'
+  TOKEN: '15m',            
+  REFRESH_TOKEN: '15d'
 }
 
 const createTokens = async (user: User): Promise<TokenData> => {
@@ -151,8 +151,6 @@ export class AuthService {
     try {
       verify(refreshToken, REFRESH_TOKEN_SECRET_KEY);
     } catch (error) {
-      throw new HttpException(401, "RefreshToken not valid...");
-    } finally {
       console.log(refreshToken, 789);
       pg.query(
         `
@@ -165,6 +163,7 @@ export class AuthService {
         `,
         [refreshToken]
       );
+      throw new HttpException(401, "RefreshToken not valid...");
     }
 
     const { rows: findToken, rowCount } = await pg.query(

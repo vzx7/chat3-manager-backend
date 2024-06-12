@@ -7,7 +7,7 @@ POST {{ baseURL }}/users/createUser
 Content-Type: application/json
 
 {
-    "email": "example@email.com",
+    "email": "example12@email.com",
 	"password": "password#@",
     "fio": "Иван Иваныч Иванов",
     "phone": 7897897899,
