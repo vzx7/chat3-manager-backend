@@ -4,6 +4,7 @@ import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { AuthService } from '@services/auth.service';
 import { ResponseData } from '@/types/ResponseData';
+import { REFRESH_TOKEN_COOKIES_EXPIRES } from '@config';
 
 export class AuthController {
   public auth = Container.get(AuthService);
@@ -23,7 +24,11 @@ export class AuthController {
       };
       
       const { refreshToken } = tokenData;
-      res.cookie('refreshToken', refreshToken.key, { httpOnly: true, secure: true, maxAge: refreshToken.expiresIn * 30 });
+
+      const  date = new Date();
+      const expires = new Date(date.setDate(date.getDate() + Number(REFRESH_TOKEN_COOKIES_EXPIRES)));
+
+      res.cookie('refreshToken', refreshToken.key, { httpOnly: true, secure: true, expires });
       res.status(200).json(response);
     } catch (error) {
       next(error);

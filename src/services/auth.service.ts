@@ -6,6 +6,7 @@ import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
+import { verify } from 'jsonwebtoken';
 
 const TOKENS_TIME = {
   TOKEN: 15 * 60,            //  15m
@@ -147,6 +148,25 @@ export class AuthService {
    * @returns 
    */
   public async updateToken(refreshToken: string): Promise<{ token: { key: string } }> {
+    try {
+      verify(refreshToken, REFRESH_TOKEN_SECRET_KEY);
+    } catch (error) {
+      throw new HttpException(401, "RefreshToken not valid...");
+    } finally {
+      console.log(refreshToken, 789);
+      pg.query(
+        `
+        DELETE
+        FROM
+          tokens
+        WHERE
+          "token" = $1
+        RETURNING "id"
+        `,
+        [refreshToken]
+      );
+    }
+
     const { rows: findToken, rowCount } = await pg.query(
       `
       SELECT
