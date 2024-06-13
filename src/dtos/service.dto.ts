@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail, IsBoolean, IsUrl } from 'class-validator';
+import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEmail, IsBoolean, IsUrl, isEmpty, IsOptional } from 'class-validator';
 
 export class CreateServiceDto {
     @IsNotEmpty()
@@ -83,7 +83,7 @@ export class UpdateServiceDto {
     @IsString()
     public personalPolice: string; 
 
-    @IsString()
+    @IsOptional()
     @IsUrl()
     public url: string; 
 
