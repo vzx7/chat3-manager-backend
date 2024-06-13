@@ -134,7 +134,7 @@ export class ServiceHelper {
     const { rows: appSet, rowCount }: { rows: App[], rowCount: number } = await pg.query(
       `
         SELECT
-          *
+          "domain"
         FROM
           services
         WHERE
@@ -142,7 +142,7 @@ export class ServiceHelper {
       `, [id]);
     if (!rowCount) throw new HttpException(409, "Service not found");
     const appConfig: AppConfig = {} as AppConfig//await this.externalAPIService.getApplicationConfig(appSet[0].appConfigurationId);
-    const appFullData: AppConfig & App = { ...appConfig, domain: appSet[0].domain, id: appSet[0].id };
+    const appFullData: AppConfig & App = { ...appConfig, domain: appSet[0].domain, id };
 
     return appFullData;
   }

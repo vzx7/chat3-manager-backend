@@ -43,8 +43,8 @@ class Consultant {
     name: string;
 
     @IsNotEmpty()
-    @IsNumber()
-    male: number;
+    @IsBoolean()
+    male: boolean;
 
     @IsNotEmpty()
     photo: Blob;
