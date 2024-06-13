@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
+import { ResponseData } from '@/types/ResponseData';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -9,9 +10,12 @@ export class UserController {
   public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: User = req.body;
-      const signUpUserData: User = await this.user.createUser(userData);
-
-      res.status(201).json({ data: signUpUserData, message: 'signup' });
+      const data: User = await this.user.createUser(userData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(201).json(response);
     } catch (error) {
       next(error);
     }
@@ -19,20 +23,28 @@ export class UserController {
 
   public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllUsersData: User[] = await this.user.findAllUser();
-
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      const data: User[] = await this.user.findManagers();
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
   };
 
+
+
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
-      const findOneUserData: User = await this.user.findUserById(userId);
-
-      res.status(200).json({ data: findOneUserData, message: 'findOne' });
+      const data: User = await this.user.findUserById(userId);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -43,9 +55,12 @@ export class UserController {
     try {
       const userId = Number(req.params.id);
       const userData: User = req.body;
-      const updateUserData: User[] = await this.user.updateUser(userId, userData);
-
-      res.status(200).json({ data: updateUserData, message: 'updated' });
+      const data: User = await this.user.updateUser(userId, userData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -54,9 +69,12 @@ export class UserController {
   public deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
-      const deleteUserData: User[] = await this.user.deleteUser(userId);
-
-      res.status(200).json({ data: deleteUserData[0], message: 'deleted' });
+      const data: User = await this.user.deleteUser(userId);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -65,9 +83,12 @@ export class UserController {
   public setActive = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: User = req.body;
-      const updateUserData: User[] = await this.user.setActiveUser(userData);
-
-      res.status(200).json({ data: updateUserData[0], message: 'set active' });
+      const data: User = await this.user.setActiveUser(userData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }

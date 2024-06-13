@@ -3,6 +3,7 @@ import { Service } from 'typedi';
 import pg from '@database';
 import { HttpException } from '@exceptions/httpException';
 import { User } from '@interfaces/users.interface';
+import { Role } from '@/types/Role';
 
 @Service()
 export class UserService {
@@ -54,13 +55,26 @@ export class UserService {
   }
 
 
-  public async findAllUser(): Promise<User[]> {
-    const { rows } = await pg.query(`
+  public async findManagers(): Promise<User[]> {
+    const { rows, rowCount } = await pg.query(
+      `
     SELECT
-      *
+      "id",
+      "email",
+      "fio",
+      "phone",
+      "bio",
+      "active"
     FROM
       users
-    `);
+    WHERE
+      role = $1
+    ORDER BY active ASC
+    `,
+      [Role.manager],
+    );
+    if (!rowCount) throw new HttpException(409, "Managers not found");
+
     return rows;
   }
 
@@ -68,7 +82,11 @@ export class UserService {
     const { rows, rowCount } = await pg.query(
       `
     SELECT
-      *
+      "id",
+      "email",
+      "fio",
+      "phone",
+      "bio"
     FROM
       users
     WHERE
@@ -81,7 +99,7 @@ export class UserService {
     return rows[0];
   }
 
-  public async updateUser(userId: number, userData: User): Promise<User[]> {
+  public async updateUser(userId: number, userData: User): Promise<User> {
     const { rows: findUser } = await pg.query(
       `
       SELECT EXISTS(
@@ -98,12 +116,13 @@ export class UserService {
     if (!findUser[0].exists) throw new HttpException(409, "User doesn't exist");
 
     const { email, password, fio, phone, bio } = userData;
-    let hashedPassword: string;
+
     let queryParams = [];
     const params = [];
     let iterator = 2;
 
     if (password) {
+      let hashedPassword: string;
       hashedPassword = await hash(password, 10);
       queryParams.push('"password" = $' + iterator++);
       params.push(hashedPassword);
@@ -143,10 +162,10 @@ export class UserService {
       [userId, ...params],
     );
 
-    return updateUserData;
+    return updateUserData[0];
   }
 
-  public async deleteUser(userId: number): Promise<User[]> {
+  public async deleteUser(userId: number): Promise<User> {
     const { rows: findUser } = await pg.query(
       `
       SELECT EXISTS(
@@ -173,10 +192,10 @@ export class UserService {
       [userId],
     );
 
-    return deleteUserData;
+    return deleteUserData[0];
   }
 
-  public async setActiveUser(userData: User): Promise<User[]> {
+  public async setActiveUser(userData: User): Promise<User> {
     const { id, active } = userData;
     const { rows: findUser } = await pg.query(
       `
@@ -205,6 +224,6 @@ export class UserService {
       [id, active],
     );
 
-    return updateUserData;
+    return updateUserData[0];
   }
 }

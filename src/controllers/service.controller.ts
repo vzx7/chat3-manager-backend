@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { Service } from '@/interfaces/service.interface';
+import { AppConfig, Service } from '@/interfaces/service.interface';
 import { ServiceHelper } from '@/services/service.service';
-import { Item } from '@/types/Brand';
+import { Item } from '@/types/Item';
+import { ResponseData } from '@/types/ResponseData';
 
 export class ServiceController {
   public serviceHelper = Container.get(ServiceHelper);
@@ -15,9 +16,12 @@ export class ServiceController {
   public createService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const serviceData: Service = req.body;
-      const createServiceData: Service = await this.serviceHelper.create(serviceData);
-
-      res.status(201).json({ data: createServiceData, message: 'create' });
+      const data: Service = await this.serviceHelper.create(serviceData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(201).json(response);
     } catch (error) {
       next(error);
     }
@@ -32,8 +36,12 @@ export class ServiceController {
   public updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const serviceData: Service = req.body;
-      const updateServiceData: Service = await this.serviceHelper.update(serviceData);
-      res.status(200).json({ data: updateServiceData, message: 'update service' });
+      const data: Service = await this.serviceHelper.update(serviceData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -45,28 +53,75 @@ export class ServiceController {
    * @param res 
    * @param next 
    */
-    public configureServiceActivity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public configureServiceActivity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const serviceData: Service = req.body;
+      const data: Service = await this.serviceHelper.configureActivity(serviceData);
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
+  public getBrands = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data: Array<Item> = await this.serviceHelper.getBrands();
+      const response: ResponseData = {
+        is: true,
+        data
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+ /**
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
+    public getServices = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-        const serviceData: Service = req.body;
-        const updateServiceData: Service = await this.serviceHelper.configureActivity(serviceData);
-        res.status(200).json({ data: updateServiceData, message: 'set active service' });
+        const data: Array<Service> = await this.serviceHelper.getServices((req as any).user);
+        const response: ResponseData = {
+          is: true,
+          data
+        };
+        res.status(200).json(response);
       } catch (error) {
         next(error);
       }
     };
 
-      /**
-   * Настроить активность сервиса
-   * @param req 
-   * @param res 
-   * @param next 
-   */
-      public getBrands = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-          const brands: Array<Item> = await this.serviceHelper.getBrands();
-          res.status(200).json({ data: brands, message: 'get brands' });
-        } catch (error) {
-          next(error);
-        }
-      };
+  /**
+  * Настроить активность сервиса
+  * @param req 
+  * @param res 
+  * @param next 
+  */
+     public getService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const serviceId = Number(req.params.id);
+        const data: Service & AppConfig = await this.serviceHelper.getServiceById(serviceId);
+        const response: ResponseData = {
+          is: true,
+          data
+        };
+        res.status(200).json(response);
+      } catch (error) {
+        next(error);
+      }
+    };
 }

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
-import { CheckAuth } from '@middlewares/auth.middleware';
+import { CheckAdmRole, CheckAuth } from '@middlewares/auth.middleware';
 import { ValidateData } from '@middlewares/validation.middleware';
 import { AccessServiceDto, CreateServiceDto, UpdateServiceDto } from '@/dtos/service.dto';
 import { ServiceController } from '@/controllers/service.controller';
@@ -31,6 +31,7 @@ export class ServiceRoute implements Routes {
     this.router.put(
       '/configureServiceActivity',
       CheckAuth,
+      CheckAdmRole,
       ValidateData(AccessServiceDto),
       this.service.configureServiceActivity
     );
@@ -39,6 +40,18 @@ export class ServiceRoute implements Routes {
       '/getBrands',
       CheckAuth,
       this.service.getBrands
+    );
+
+    this.router.get(
+      '/getServices',
+      CheckAuth,
+      this.service.getServices
+    );
+
+    this.router.get(
+      `/getService/:id(\\d+)`,
+      CheckAuth,
+      this.service.getService
     );
   }
 }
