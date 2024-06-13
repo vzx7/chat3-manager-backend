@@ -18,12 +18,14 @@ CREATE TABLE users(
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );
-
+-- ================
+--   TABLE [services]
+-- ================
+-- create users services
 CREATE TABLE services(
     "id" SERIAL PRIMARY KEY,
     "domain" VARCHAR(32) UNIQUE NOT NULL,
     "active" BOOLEAN,
-    "isInitialization" BOOLEAN,
     "isConfigured" BOOLEAN,
     "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL,
@@ -31,7 +33,10 @@ CREATE TABLE services(
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
     "updatedAt" TIMESTAMP WITHOUT TIME ZONE
 );
-
+-- ================
+--   TABLE [tokens]
+-- ================
+-- create users tokens
 CREATE TABLE tokens(
     "id" SERIAL PRIMARY KEY,
     "token" VARCHAR(300) UNIQUE NOT NULL,
