@@ -1,9 +1,8 @@
 import { config } from 'dotenv';
 
 const path = require('path');
-const dir = process.env.NODE_ENV === 'production' ? `${path.dirname(require.main.filename)}/` : '';
 
-config({ path: `${dir}.env.${process.env.NODE_ENV || 'development'}.local` });
+config({ path: `${path.dirname(require.main.filename)}/../.env.${process.env.NODE_ENV || 'development'}.local` });
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
 export const { NODE_ENV, PORT, TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, REFRESH_TOKEN_COOKIES_EXPIRES, REFRESH_TOKEN_TIME, TOKEN_TIME, LOG_FORMAT, LOG_DIR, ORIGIN } = process.env;
