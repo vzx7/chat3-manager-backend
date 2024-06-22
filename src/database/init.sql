@@ -27,6 +27,7 @@ CREATE TABLE services(
     "domain" VARCHAR(32) UNIQUE NOT NULL,
     "active" BOOLEAN,
     "isConfigured" BOOLEAN,
+    "isInitialization" BOOLEAN,
     "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL,
     "appConfigurationId" INTEGER,
