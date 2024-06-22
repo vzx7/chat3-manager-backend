@@ -25,6 +25,7 @@ export class ServiceHelper {
           "domain",
           "active",
           "isConfigured",
+          "isiInitialization",
           "appConfigurationId",
           "isSSL",
           "userId"
