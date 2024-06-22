@@ -16,7 +16,7 @@ export class ServiceHelper {
     const active = false;  // при создание сервис неактивен, домен отключен
     const isConfigured = false;// await this.externalAPIService.checkApplicationByDomain(domain);
     const appConfigurationId = null;// await this.externalAPIService.checkApplicationByDomain(domain);
-    const isiInitialization = false;
+    const isInitialization = false;
 
     const { rows: appData } = await pg.query(
       `
@@ -25,7 +25,7 @@ export class ServiceHelper {
           "domain",
           "active",
           "isConfigured",
-          "isiInitialization",
+          "isInitialization",
           "appConfigurationId",
           "isSSL",
           "userId"
@@ -33,7 +33,7 @@ export class ServiceHelper {
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING "id", "isConfigured"
       `,
-      [domain, active, isiInitialization, isConfigured, appConfigurationId, isSSL, userId],
+      [domain, active, isInitialization, isConfigured, appConfigurationId, isSSL, userId],
     );
 
     return appData[0];
