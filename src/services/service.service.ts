@@ -135,7 +135,8 @@ export class ServiceHelper {
     const { rows: appSet, rowCount }: { rows: App[], rowCount: number } = await pg.query(
       `
         SELECT
-          "domain"
+          "domain",
+          "subdomain"
         FROM
           services
         WHERE

@@ -30,8 +30,8 @@ export class UserRoute implements Routes {
 
     this.router.post(
       `${this.path}/createUser`, 
-      CheckAuth,
-      CheckAdmRole,
+     // CheckAuth,
+     // CheckAdmRole,
       ValidateData(CreateUserDto), 
       this.user.createUser
     );
