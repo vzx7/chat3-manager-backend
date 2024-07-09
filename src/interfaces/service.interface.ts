@@ -1,6 +1,7 @@
 export type Service = {
   id?: number;
-  domain: string;
+  subdomain: string;
+  domain?: string;
   active?: boolean;
   isConfigured?: boolean;
   userId?: number;

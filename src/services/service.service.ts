@@ -11,7 +11,7 @@ import { Role } from '@/types/Role';
 export class ServiceHelper {
   public externalAPIService = Container.get(ExternalAPIService);
   public async create(serviceData: App): Promise<App> {
-    const { domain, isSSL, userId } = serviceData;
+    const { domain, subdomain, userId } = serviceData;
 
     const active = false;  // при создание сервис неактивен, домен отключен
     const isConfigured = false;// await this.externalAPIService.checkApplicationByDomain(domain);
@@ -23,17 +23,17 @@ export class ServiceHelper {
       INSERT INTO
         services(
           "domain",
+          "subdomain",
           "active",
           "isConfigured",
           "isInitialization",
           "appConfigurationId",
-          "isSSL",
           "userId"
         )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING "id", "isConfigured"
       `,
-      [domain, active, isInitialization, isConfigured, appConfigurationId, isSSL, userId],
+      [domain, subdomain, active, isInitialization, isConfigured, appConfigurationId, userId],
     );
 
     return appData[0];
@@ -143,7 +143,7 @@ export class ServiceHelper {
       `, [id]);
     if (!rowCount) throw new HttpException(409, "Service not found");
     const appConfig: AppConfig = {} as AppConfig//await this.externalAPIService.getApplicationConfig(appSet[0].appConfigurationId);
-    const appFullData: AppConfig & App = { ...appConfig, domain: appSet[0].domain, id };
+    const appFullData: AppConfig & App = { ...appConfig, domain: appSet[0].domain, subdomain: appSet[0].subdomain, id };
 
     return appFullData;
   }

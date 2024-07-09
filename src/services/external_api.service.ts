@@ -17,21 +17,21 @@ export class ExternalAPIService {
     }
 
     /**
-     * Существует ли приложения для созданного домена
-     * Дело в том, что одно приложение может быть привязано к разным доменам и может случится, 
-     * что после добавления домена приложение уже было ранее создано.
-     * @param domain 
+     * Существует ли приложения для созданного поддомена
+     * Дело в том, что одно приложение может быть привязано к разным поддоменам и может случится, 
+     * что после добавления поддомена приложение уже было ранее создано.
+     * @param subdomain 
      * @returns 
      */
-    public async checkApplicationByDomain(domain: string): Promise<boolean> {
+    public async checkApplicationBySubDomain(subdomain: string): Promise<boolean> {
         try {
             const { data } = await axios({
-                url: `${this.URL}/check-application-by-domain`,
+                url: `${this.URL}/check-application-by-subdomain`,
                 method: 'get',
                 headers: {
                     Authorization: EXTERNAL_API_KEY
                 },
-                data: { domain }
+                data: { subdomain }
             });
             return data;
         } catch (error) {
@@ -41,7 +41,7 @@ export class ExternalAPIService {
 
     /**
      * Обновление созданного сервиса
-     * @param domain 
+     * @param serviceData 
      * @returns 
      */
     public async configureApplication(serviceData: App): Promise<boolean> {
@@ -62,7 +62,6 @@ export class ExternalAPIService {
 
     /**
      * Получить словарь брендов
-     * @param domain 
      * @returns 
      */
     public async getBrands(): Promise<Array<Item>> {
@@ -82,11 +81,10 @@ export class ExternalAPIService {
 
     /**
      * Получить конфигурацию прниложения
-     * @param domain 
+     * @param id 
      * @returns 
      */
     public async getApplicationConfig(id: number): Promise<Array<Item>> {
-
         try {
             const { data } = await axios({
                 url: `${this.URL}/get-app-configuration/${id}`,

@@ -4,11 +4,11 @@ import { IsString, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsNumber, IsEma
 export class CreateServiceDto {
     @IsNotEmpty()
     @IsString()
-    public domain: string;
+    public subdomain: string;
 
     @IsNotEmpty()
-    @IsBoolean()
-    isSSL: boolean;
+    @IsString()
+    public domain: string;
 
     @IsNotEmpty()
     @IsNumber()
