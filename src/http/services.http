@@ -8,8 +8,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3MzMxNTMyLCJleHAiOjE3MTgyMzE1MzJ9.srvTDM6PvdqJcN6c2bu4IRWURqsSMwVUWHB7KkVgRww
 
 {
-    "domain": "newDomain",
-    "isSSL": true,
+    "subdomain": "newDomain",
+    "domain": "example.com",
     "userId": 1
 }
 

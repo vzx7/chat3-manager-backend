@@ -24,11 +24,11 @@ CREATE TABLE users(
 -- create users services
 CREATE TABLE services(
     "id" SERIAL PRIMARY KEY,
-    "domain" VARCHAR(32) UNIQUE NOT NULL,
+    "subdomain" VARCHAR(32) UNIQUE NOT NULL,
+    "domain" VARCHAR(32) NOT NULL,
     "active" BOOLEAN,
     "isConfigured" BOOLEAN,
     "isInitialization" BOOLEAN,
-    "isSSL" BOOLEAN,
     "userId" INTEGER NOT NULL,
     "appConfigurationId" INTEGER,
     "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT(NOW() AT TIME ZONE 'utc'),
