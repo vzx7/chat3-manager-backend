@@ -17,44 +17,44 @@ export class UserRoute implements Routes {
   private initializeRoutes() {
 
     this.router.get(
-      this.path, 
-      CheckAuth, 
+      this.path,
+      CheckAuth,
       this.user.getUsers
     );
 
     this.router.get(
-      `${this.path}/:id(\\d+)`, 
-      CheckAuth, 
+      `${this.path}/:id(\\d+)`,
+      CheckAuth,
       this.user.getUserById
     );
 
     this.router.post(
-      `${this.path}/createUser`, 
-     // CheckAuth,
-     // CheckAdmRole,
-      ValidateData(CreateUserDto), 
+      `${this.path}/createUser`,
+      //CheckAuth,
+      //CheckAdmRole,
+      ValidateData(CreateUserDto),
       this.user.createUser
     );
 
     this.router.put(
-      `${this.path}/:id(\\d+)`, 
+      `${this.path}/:id(\\d+)`,
       CheckAuth,
       CheckAdmRole,
-      ValidateData(UpdateUserDto, true), 
+      ValidateData(UpdateUserDto, true),
       this.user.updateUser
     );
 
     this.router.put(
-      `${this.path}/setActive`, 
-      CheckAuth, 
+      `${this.path}/setActive`,
+      CheckAuth,
       CheckAdmRole,
-      ValidateData(AccessUserDto, true), 
+      ValidateData(AccessUserDto, true),
       this.user.setActive
     );
-    
+
     this.router.delete(
-      `${this.path}/:id(\\d+)`, 
-      CheckAuth, 
+      `${this.path}/:id(\\d+)`,
+      CheckAuth,
       CheckAdmRole,
       this.user.deleteUser
     );

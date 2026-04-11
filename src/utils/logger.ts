@@ -1,11 +1,17 @@
 import { existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 import { LOG_DIR } from '@config';
 
-// logs dir
-const logDir: string = join(__dirname, LOG_DIR);
+const getBaseDir = (): string => {
+  if (typeof __dirname !== 'undefined') {
+    return __dirname;
+  }
+  return process.cwd();
+};
+
+const logDir: string = LOG_DIR ? join(getBaseDir(), LOG_DIR) : join(getBaseDir(), 'logs');
 
 if (!existsSync(logDir)) {
   mkdirSync(logDir);

@@ -29,7 +29,8 @@ export class App {
   }
 
   private setStatic() {
-    this.app.use(express.static(path.resolve(__dirname, 'static')));
+    const staticPath = typeof __dirname !== 'undefined' ? path.resolve(__dirname, 'static') : path.resolve(process.cwd(), 'src/static');
+    this.app.use(express.static(staticPath));
   }
 
   public listen() {
